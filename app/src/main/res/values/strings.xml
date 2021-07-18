@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">RemoteAcControl</string>
+
+    <string name="root_temperature">%.0f</string>
+    <string name="root_temperature_celsius">\u2103</string>
+    <string name="root_temperature_for_selector">%d\u2103</string>
+    <string name="root_apply">Применить</string>
+    <string name="root_ac_off">выкл</string>
+    <string name="root_ac_on">вкл</string>
+</resources>
