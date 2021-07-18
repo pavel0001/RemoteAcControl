@@ -52,14 +52,7 @@ class RootFragment : Fragment() {
                 viewModel.acOn()
             }
             frOffButton.setOnClickListener {
-                //viewModel.acOff()
-                if (frTemperature.visibility == View.VISIBLE) {
-                    frTemperature.isGone = true
-                    frTemperatureSign.isGone = true
-                } else {
-                    frTemperature.isGone = false
-                    frTemperatureSign.isGone = false
-                }
+                viewModel.acOff()
             }
             frApply.setOnClickListener {
                 viewModel.applyCmd()
