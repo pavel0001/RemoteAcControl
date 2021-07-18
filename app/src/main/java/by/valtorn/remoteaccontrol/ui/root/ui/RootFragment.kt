@@ -5,9 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
+import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import by.valtorn.remoteaccontrol.R
@@ -42,17 +41,25 @@ class RootFragment : Fragment() {
         activity?.let {
             viewModel.initMqtt(it)
             initUI()
-            initVM(it)
+            initVM()
         }
     }
 
     private fun initUI() {
         with(binding) {
+            frTempProgress.spin()
             frOnButton.setOnClickListener {
                 viewModel.acOn()
             }
             frOffButton.setOnClickListener {
-                viewModel.acOff()
+                //viewModel.acOff()
+                if (frTemperature.visibility == View.VISIBLE) {
+                    frTemperature.isGone = true
+                    frTemperatureSign.isGone = true
+                } else {
+                    frTemperature.isGone = false
+                    frTemperatureSign.isGone = false
+                }
             }
             frApply.setOnClickListener {
                 viewModel.applyCmd()
@@ -77,7 +84,7 @@ class RootFragment : Fragment() {
         }
     }
 
-    private fun initVM(activity: FragmentActivity) {
+    private fun initVM() {
         with(binding) {
             viewModel.mqttProgress.observe(viewLifecycleOwner) {
                 frProgress.updateProgressState(it)
@@ -85,18 +92,14 @@ class RootFragment : Fragment() {
             viewModel.receivedMessage.observe(viewLifecycleOwner) {
                 when (it.topic) {
                     MQTT_TOPIC_TEMPERATURE -> {
-                        frTemperature.isVisible = true
-                        frTemperatureSign.isVisible = true
+                        Log.i(DEBUG_TAG, "receivedMessage $it")
+                        frTempProgress.stopSpinning()
                         frTemperature.text =
                             getString(R.string.root_temperature, it.getTemperatureFloat())
-                    }
-                    else -> {
-
+                        frTemperatureSign.isGone = false
+                        frTemperature.isGone = false
                     }
                 }
-            }
-            viewModel.currentAcMode.observe(viewLifecycleOwner) {
-                Log.i(DEBUG_TAG, "currentAcMode $it")
             }
         }
     }
