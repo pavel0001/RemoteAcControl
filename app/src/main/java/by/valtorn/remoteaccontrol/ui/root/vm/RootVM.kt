@@ -14,7 +14,7 @@ class RootVM : ViewModel() {
 
     val mqttProgress = MqttRepository.mqttProgress
     val receivedMessage = MqttRepository.receivedMessage
-    val connectResult = MqttRepository.connectResult
+    val publishResult = MqttRepository.publishResult
 
     private val _currentAcMode = MutableLiveData(AcModeWithTemp(AcMode.AC_MODE_COOL, 19))
     val currentAcMode: LiveData<AcModeWithTemp> = _currentAcMode
@@ -57,8 +57,12 @@ class RootVM : ViewModel() {
         }
     }
 
-    fun reConnect(context: Context) {
-        MqttRepository.reconect(context)
+    fun turbo(){
+        MqttRepository.acMode(AcMode.AC_MODE_TURBO)
+    }
+
+    fun checkConnection() {
+        MqttRepository.reconnect()
     }
 
     data class AcModeWithTemp(val mode: AcMode, val temp: Int)

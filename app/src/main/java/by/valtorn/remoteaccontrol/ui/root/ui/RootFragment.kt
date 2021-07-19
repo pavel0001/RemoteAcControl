@@ -5,8 +5,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import by.valtorn.remoteaccontrol.R
@@ -31,9 +33,7 @@ class RootFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        activity?.let {
-            viewModel.reConnect(it)
-        }
+        viewModel.checkConnection()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,7 +41,7 @@ class RootFragment : Fragment() {
         activity?.let {
             viewModel.initMqtt(it)
             initUI()
-            initVM()
+            initVM(it)
         }
     }
 
@@ -56,6 +56,9 @@ class RootFragment : Fragment() {
             }
             frApply.setOnClickListener {
                 viewModel.applyCmd()
+            }
+            frTurbo.setOnClickListener {
+                viewModel.turbo()
             }
 
             frAcTemperature.minValue = 1
@@ -77,7 +80,7 @@ class RootFragment : Fragment() {
         }
     }
 
-    private fun initVM() {
+    private fun initVM(activity: FragmentActivity) {
         with(binding) {
             viewModel.mqttProgress.observe(viewLifecycleOwner) {
                 frProgress.updateProgressState(it)
@@ -93,6 +96,9 @@ class RootFragment : Fragment() {
                         frTemperature.isGone = false
                     }
                 }
+            }
+            viewModel.publishResult.observe(viewLifecycleOwner){
+                Toast.makeText(activity,it.str,Toast.LENGTH_SHORT).show()
             }
         }
     }

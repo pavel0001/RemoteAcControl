@@ -15,9 +15,6 @@ object MqttRepository {
     private val mMqttProgress = MutableLiveData(false)
     val mqttProgress: LiveData<Boolean> = mMqttProgress
 
-    private val mConnectResult = MutableLiveData<RequestResult>()
-    val connectResult: LiveData<RequestResult> = mConnectResult
-
     private val mPublishResult = MutableLiveData<RequestResult>()
     val publishResult: LiveData<RequestResult> = mPublishResult
 
@@ -34,13 +31,13 @@ object MqttRepository {
     }
 
     private fun publishCmd(topic: String, cmd: String) {
-              mMqttProgress.value = true
-              mqttClient?.publish(
-                  topic = topic,
-                  msg = cmd,
-                  qos = 1,
-                  cbPublish = publishCallback
-              )
+        mMqttProgress.value = true
+        mqttClient?.publish(
+            topic = topic,
+            msg = cmd,
+            qos = 1,
+            cbPublish = publishCallback
+        )
         Log.i(DEBUG_TAG, "publishCmd topic $topic cmd = $cmd")
     }
 
@@ -68,21 +65,20 @@ object MqttRepository {
         mqttClient?.subscribe(topic = MQTT_TOPIC_ROOT, qos = 1)
     }
 
-    fun reconect(context: Context) {
+    fun reconnect() {
         mqttClient?.let {
             if (it.isConnected())
-                initializeAndConnect(context)
+                it.connect()
         }
     }
 
     private val connectCallback = object : IMqttActionListener {
         override fun onSuccess(asyncActionToken: IMqttToken?) {
             subscribe()
-            mConnectResult.value = RequestResult.SUCCES
         }
 
         override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
-            mConnectResult.value = RequestResult.FAIL
+            reconnect()
         }
     }
 
@@ -92,6 +88,7 @@ object MqttRepository {
         }
 
         override fun connectionLost(cause: Throwable?) {
+            reconnect()
             Log.d(DEBUG_TAG, "Connection lost ${cause.toString()}")
         }
 
@@ -114,9 +111,9 @@ object MqttRepository {
         }
     }
 
-    enum class RequestResult {
-        SUCCES,
-        FAIL
+    enum class RequestResult(val str: String) {
+        SUCCES("Доставлено"),
+        FAIL("Ошибка")
     }
 
     data class MessageMqtt(val topic: String?, val message: MqttMessage?) {

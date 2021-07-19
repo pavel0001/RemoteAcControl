@@ -28,7 +28,8 @@ enum class AcMode(val str: String) {
     AC_MODE_COOL("cool"),
     AC_MODE_HEAT("heat"),
     AC_MODE_AVTO("avto"),
-    AC_MODE_DRY("dry")
+    AC_MODE_DRY("dry"),
+    AC_MODE_TURBO("turbo")
 }
 
-val tempForAc = arrayOf(19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30)
+val tempForAc = arrayOf(18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30)
