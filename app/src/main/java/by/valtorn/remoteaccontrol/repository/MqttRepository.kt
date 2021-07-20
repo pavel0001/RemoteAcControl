@@ -5,7 +5,9 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import by.valtorn.remoteaccontrol.MQTTClient
-import by.valtorn.remoteaccontrol.utils.*
+import by.valtorn.remoteaccontrol.utils.DEBUG_TAG
+import by.valtorn.remoteaccontrol.utils.MQTT_TOPIC_JSON_CMD
+import by.valtorn.remoteaccontrol.utils.MQTT_TOPIC_ROOT
 import org.eclipse.paho.client.mqttv3.*
 
 object MqttRepository {
@@ -41,24 +43,9 @@ object MqttRepository {
         Log.i(DEBUG_TAG, "publishCmd topic $topic cmd = $cmd")
     }
 
-    fun acOn() {
-        publishCmd(MQTT_TOPIC_AC_RUN, AC_COMMAND_ON)
-    }
-
-    fun acOff() {
-        publishCmd(MQTT_TOPIC_AC_RUN, AC_COMMAND_OFF)
-    }
-
-    fun acMode(mode: AcMode) {
-        publishCmd(MQTT_TOPIC_AC_MODE, mode.str)
-    }
-
-    fun acTempHeat(temp: Int) {
-        publishCmd(MQTT_TOPIC_AC_TEMP_HEAT, temp.toString())
-    }
-
-    fun acTempCool(temp: Int) {
-        publishCmd(MQTT_TOPIC_AC_TEMP_COOL, temp.toString())
+    fun sendJsonCmd(json: String) {
+        Log.i(DEBUG_TAG, "sending json $json")
+        //publishCmd(MQTT_TOPIC_JSON_CMD, json)
     }
 
     private fun subscribe() {
@@ -67,6 +54,7 @@ object MqttRepository {
 
     fun reconnect() {
         mqttClient?.let {
+            Log.d(DEBUG_TAG, "reconnect it.isConnected() = ${it.isConnected()}")
             if (it.isConnected())
                 it.connect()
         }

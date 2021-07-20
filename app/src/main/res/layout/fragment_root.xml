@@ -64,10 +64,10 @@
         android:id="@+id/fr_turbo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="32dp"
         android:src="@drawable/ic_turbo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription" />
 
     <com.shawnlin.numberpicker.NumberPicker

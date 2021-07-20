@@ -1,14 +1,12 @@
 package by.valtorn.remoteaccontrol.ui.root.vm
 
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import by.valtorn.remoteaccontrol.model.AcMode
+import by.valtorn.remoteaccontrol.model.AcPower
+import by.valtorn.remoteaccontrol.model.AcTurbo
+import by.valtorn.remoteaccontrol.repository.CmdRepository
 import by.valtorn.remoteaccontrol.repository.MqttRepository
-import by.valtorn.remoteaccontrol.utils.AC_MODE_COOL
-import by.valtorn.remoteaccontrol.utils.AC_MODE_HEAT
-import by.valtorn.remoteaccontrol.utils.AcMode
-import by.valtorn.remoteaccontrol.utils.tempForAc
 
 class RootVM : ViewModel() {
 
@@ -16,55 +14,38 @@ class RootVM : ViewModel() {
     val receivedMessage = MqttRepository.receivedMessage
     val publishResult = MqttRepository.publishResult
 
-    private val _currentAcMode = MutableLiveData(AcModeWithTemp(AcMode.AC_MODE_COOL, 19))
-    val currentAcMode: LiveData<AcModeWithTemp> = _currentAcMode
+    private val currentState = CmdRepository.currentState
 
     fun initMqtt(context: Context) {
         MqttRepository.initializeAndConnect(context)
     }
 
     fun acOn() {
-        MqttRepository.acOn()
+        CmdRepository.setPower(AcPower.ON)
     }
 
     fun acOff() {
-        MqttRepository.acOff()
+        CmdRepository.setPower(AcPower.OFF)
     }
 
     fun selectMode(mode: AcMode) {
-        _currentAcMode.value = _currentAcMode.value?.copy(mode = mode)
+        CmdRepository.setMode(mode)
     }
 
     fun selectTemp(temp: Int) {
-        if (tempForAc.contains(temp)) {
-            _currentAcMode.value = _currentAcMode.value?.copy(temp = temp)
-        }
+        CmdRepository.setTemp(temp)
     }
 
-    fun applyCmd() {
-        currentAcMode.value?.let { mode ->
-            when (mode.mode.str) {
-                AC_MODE_COOL -> {
-                    MqttRepository.acTempCool(mode.temp)
-                }
-                AC_MODE_HEAT -> {
-                    MqttRepository.acTempHeat(mode.temp)
-                }
-                else -> {
-                    MqttRepository.acMode(mode.mode)
-                }
-            }
-        }
+    fun sendCmd() {
+        MqttRepository.sendJsonCmd(CmdRepository.getJson())
     }
 
-    fun turbo(){
-        MqttRepository.acMode(AcMode.AC_MODE_TURBO)
+    fun turbo() {
+        CmdRepository.setTurbo(AcTurbo.ON)
     }
 
     fun checkConnection() {
         MqttRepository.reconnect()
     }
-
-    data class AcModeWithTemp(val mode: AcMode, val temp: Int)
 
 }

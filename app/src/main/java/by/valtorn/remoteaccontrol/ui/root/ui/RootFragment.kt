@@ -13,8 +13,8 @@ import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import by.valtorn.remoteaccontrol.R
 import by.valtorn.remoteaccontrol.databinding.FragmentRootBinding
+import by.valtorn.remoteaccontrol.model.AcMode
 import by.valtorn.remoteaccontrol.ui.root.vm.RootVM
-import by.valtorn.remoteaccontrol.utils.AcMode
 import by.valtorn.remoteaccontrol.utils.DEBUG_TAG
 import by.valtorn.remoteaccontrol.utils.MQTT_TOPIC_TEMPERATURE
 import by.valtorn.remoteaccontrol.utils.tempForAc
@@ -55,7 +55,7 @@ class RootFragment : Fragment() {
                 viewModel.acOff()
             }
             frApply.setOnClickListener {
-                viewModel.applyCmd()
+                viewModel.sendCmd()
             }
             frTurbo.setOnClickListener {
                 viewModel.turbo()
@@ -69,7 +69,7 @@ class RootFragment : Fragment() {
 
             frAcMode.minValue = 1
             frAcMode.maxValue = AcMode.values().size
-            frAcMode.displayedValues = AcMode.values().map { it.str }.toTypedArray()
+            frAcMode.displayedValues = AcMode.values().map { it.name }.toTypedArray()
 
             frAcTemperature.setOnValueChangedListener { _, _, newVal ->
                 viewModel.selectTemp(tempForAc[newVal - 1])
@@ -86,9 +86,9 @@ class RootFragment : Fragment() {
                 frProgress.updateProgressState(it)
             }
             viewModel.receivedMessage.observe(viewLifecycleOwner) {
+                Log.i(DEBUG_TAG, "receivedMessage $it")
                 when (it.topic) {
                     MQTT_TOPIC_TEMPERATURE -> {
-                        Log.i(DEBUG_TAG, "receivedMessage $it")
                         frTempProgress.stopSpinning()
                         frTemperature.text =
                             getString(R.string.root_temperature, it.getTemperatureFloat())
@@ -97,8 +97,8 @@ class RootFragment : Fragment() {
                     }
                 }
             }
-            viewModel.publishResult.observe(viewLifecycleOwner){
-                Toast.makeText(activity,it.str,Toast.LENGTH_SHORT).show()
+            viewModel.publishResult.observe(viewLifecycleOwner) {
+                Toast.makeText(activity, it.str, Toast.LENGTH_SHORT).show()
             }
         }
     }
