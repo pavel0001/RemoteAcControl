@@ -27,12 +27,14 @@ object CmdRepository {
         mCurrentState.value = currentState.value?.copy(power = power.value)
     }
 
-    fun setTurbo(turbo: AcTurbo) {
-        mCurrentState.value = currentState.value?.copy(turbo = turbo.value)
+    fun togglePower() {
+        currentState.value?.let {
+            mCurrentState.value = currentState.value?.copy(power = if (it.power == 0) 1 else 0)
+        }
     }
 
-    val ps = object : PropertyStrategy {
-        override fun accept(property: KProperty<*>) = property.name != "something"
+    fun setTurbo(turbo: AcTurbo) {
+        mCurrentState.value = currentState.value?.copy(turbo = turbo.value)
     }
 
     fun getJson() = Klaxon().toJsonString(currentState.value)

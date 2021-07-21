@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -16,8 +17,7 @@ import by.valtorn.remoteaccontrol.databinding.FragmentRootBinding
 import by.valtorn.remoteaccontrol.model.AcMode
 import by.valtorn.remoteaccontrol.ui.root.vm.RootVM
 import by.valtorn.remoteaccontrol.utils.DEBUG_TAG
-import by.valtorn.remoteaccontrol.utils.MQTT_TOPIC_TEMPERATURE
-import by.valtorn.remoteaccontrol.utils.tempForAc
+import com.bumptech.glide.Glide
 
 class RootFragment : Fragment() {
 
@@ -47,33 +47,25 @@ class RootFragment : Fragment() {
 
     private fun initUI() {
         with(binding) {
+            frTempSliderValue.text = getString(R.string.root_temperature_for_selector, 17)
+            frTempSlider.addOnChangeListener { _, value, _ ->
+                frTempSliderValue.text = getString(R.string.root_temperature_for_selector, value.toInt())
+                viewModel.selectTemp(value.toInt())
+            }
             frTempProgress.spin()
-            frOnButton.setOnClickListener {
-                viewModel.acOn()
-            }
-            frOffButton.setOnClickListener {
-                viewModel.acOff()
-            }
             frApply.setOnClickListener {
+                Log.i(DEBUG_TAG, "sending sendCmd press button")
                 viewModel.sendCmd()
             }
             frTurbo.setOnClickListener {
                 viewModel.turbo()
             }
-
-            frAcTemperature.minValue = 1
-            frAcTemperature.maxValue = tempForAc.size
-            frAcTemperature.displayedValues = tempForAc.map {
-                getString(R.string.root_temperature_for_selector, it)
-            }.toTypedArray()
-
+            frAcToggle.setOnClickListener {
+                viewModel.acTogglePower()
+            }
             frAcMode.minValue = 1
             frAcMode.maxValue = AcMode.values().size
             frAcMode.displayedValues = AcMode.values().map { it.name }.toTypedArray()
-
-            frAcTemperature.setOnValueChangedListener { _, _, newVal ->
-                viewModel.selectTemp(tempForAc[newVal - 1])
-            }
             frAcMode.setOnValueChangedListener { _, _, newVal ->
                 viewModel.selectMode(AcMode.values()[newVal - 1])
             }
@@ -85,20 +77,22 @@ class RootFragment : Fragment() {
             viewModel.mqttProgress.observe(viewLifecycleOwner) {
                 frProgress.updateProgressState(it)
             }
-            viewModel.receivedMessage.observe(viewLifecycleOwner) {
-                Log.i(DEBUG_TAG, "receivedMessage $it")
-                when (it.topic) {
-                    MQTT_TOPIC_TEMPERATURE -> {
-                        frTempProgress.stopSpinning()
-                        frTemperature.text =
-                            getString(R.string.root_temperature, it.getTemperatureFloat())
-                        frTemperatureSign.isGone = false
-                        frTemperature.isGone = false
-                    }
+            viewModel.receivedMessage.observe(viewLifecycleOwner) { receivedMessage ->
+                receivedMessage?.let {
+                    frTempProgress.stopSpinning()
+                    frTemperature.text =
+                        getString(R.string.root_temperature, it.temperature)
+                    frTemperatureSign.isGone = false
+                    frTemperature.isGone = false
                 }
             }
             viewModel.publishResult.observe(viewLifecycleOwner) {
                 Toast.makeText(activity, it.str, Toast.LENGTH_SHORT).show()
+            }
+            viewModel.currentAcState.observe(viewLifecycleOwner) {
+                if (it.power == 1) Glide.with(activity).load(ContextCompat.getDrawable(activity, R.drawable.ic_power_on)).into(frAcToggle)
+                else Glide.with(activity).load(ContextCompat.getDrawable(activity, R.drawable.ic_power_off)).into(frAcToggle)
+                Log.i(DEBUG_TAG, "receive current state $it")
             }
         }
     }

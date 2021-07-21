@@ -5,9 +5,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import by.valtorn.remoteaccontrol.MQTTClient
-import by.valtorn.remoteaccontrol.utils.DEBUG_TAG
-import by.valtorn.remoteaccontrol.utils.MQTT_TOPIC_JSON_CMD
-import by.valtorn.remoteaccontrol.utils.MQTT_TOPIC_ROOT
+import by.valtorn.remoteaccontrol.model.AcState
+import by.valtorn.remoteaccontrol.model.SensorResponse
+import by.valtorn.remoteaccontrol.repository.CmdRepository.jsonToModel
+import by.valtorn.remoteaccontrol.utils.*
+import com.beust.klaxon.Klaxon
 import org.eclipse.paho.client.mqttv3.*
 
 object MqttRepository {
@@ -20,8 +22,11 @@ object MqttRepository {
     private val mPublishResult = MutableLiveData<RequestResult>()
     val publishResult: LiveData<RequestResult> = mPublishResult
 
-    private val mReceivedMessage = MutableLiveData<MessageMqtt>()
-    val receivedMessage: LiveData<MessageMqtt> = mReceivedMessage
+    private val mReceivedMessage = MutableLiveData<SensorResponse>()
+    val receivedMessage: LiveData<SensorResponse> = mReceivedMessage
+
+    private val mCurrentAcState = MutableLiveData<AcState>()
+    val currentAcState: LiveData<AcState> = mCurrentAcState
 
     fun initializeAndConnect(context: Context) {
         mMqttProgress.value = true
@@ -45,11 +50,11 @@ object MqttRepository {
 
     fun sendJsonCmd(json: String) {
         Log.i(DEBUG_TAG, "sending json $json")
-        //publishCmd(MQTT_TOPIC_JSON_CMD, json)
+        publishCmd(MQTT_TOPIC_JSON_CMD, json)
     }
 
     private fun subscribe() {
-        mqttClient?.subscribe(topic = MQTT_TOPIC_ROOT, qos = 1)
+        mqttClient?.subscribe(topic = "$MQTT_TOPIC_ROOT+", qos = 1)
     }
 
     fun reconnect() {
@@ -72,7 +77,20 @@ object MqttRepository {
 
     private val clientCallback = object : MqttCallback {
         override fun messageArrived(topic: String?, message: MqttMessage?) {
-            mReceivedMessage.value = MessageMqtt(topic, message)
+            Log.d(DEBUG_TAG, "Receive message in topic $topic message  $message")
+            when (topic) {
+                MQTT_TOPIC_SENSOR -> {
+                    Klaxon().parse<SensorResponse>(message.toString())?.let { data ->
+                        mReceivedMessage.value = data
+                    }
+                }
+                MQTT_TOPIC_CALLBACK -> {
+                    jsonToModel(message.toString())?.let {
+                        mCurrentAcState.value = it
+                        Log.d(DEBUG_TAG, "Receive callback status  $message")
+                    }
+                }
+            }
         }
 
         override fun connectionLost(cause: Throwable?) {
@@ -102,12 +120,5 @@ object MqttRepository {
     enum class RequestResult(val str: String) {
         SUCCES("Доставлено"),
         FAIL("Ошибка")
-    }
-
-    data class MessageMqtt(val topic: String?, val message: MqttMessage?) {
-
-        fun getTemperatureFloat() = this.message?.payload?.decodeToString()?.toFloat()
-
-        fun getPressureInt() = this.message?.payload?.decodeToString()?.toInt()
     }
 }

@@ -1,18 +1,20 @@
 package by.valtorn.remoteaccontrol.ui.root.vm
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import by.valtorn.remoteaccontrol.model.AcMode
-import by.valtorn.remoteaccontrol.model.AcPower
 import by.valtorn.remoteaccontrol.model.AcTurbo
 import by.valtorn.remoteaccontrol.repository.CmdRepository
 import by.valtorn.remoteaccontrol.repository.MqttRepository
+import by.valtorn.remoteaccontrol.utils.DEBUG_TAG
 
 class RootVM : ViewModel() {
 
     val mqttProgress = MqttRepository.mqttProgress
     val receivedMessage = MqttRepository.receivedMessage
     val publishResult = MqttRepository.publishResult
+    val currentAcState = MqttRepository.currentAcState
 
     private val currentState = CmdRepository.currentState
 
@@ -20,12 +22,9 @@ class RootVM : ViewModel() {
         MqttRepository.initializeAndConnect(context)
     }
 
-    fun acOn() {
-        CmdRepository.setPower(AcPower.ON)
-    }
-
-    fun acOff() {
-        CmdRepository.setPower(AcPower.OFF)
+    fun acTogglePower() {
+        CmdRepository.togglePower()
+        sendCmd()
     }
 
     fun selectMode(mode: AcMode) {
@@ -37,11 +36,13 @@ class RootVM : ViewModel() {
     }
 
     fun sendCmd() {
+        Log.i(DEBUG_TAG, "sending sendCmd ViewModel")
         MqttRepository.sendJsonCmd(CmdRepository.getJson())
     }
 
     fun turbo() {
         CmdRepository.setTurbo(AcTurbo.ON)
+        sendCmd()
     }
 
     fun checkConnection() {

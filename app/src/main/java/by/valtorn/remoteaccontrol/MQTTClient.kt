@@ -50,7 +50,7 @@ class MQTTClient(
         }
     }
 
-    fun unsubscribe(
+/*    fun unsubscribe(
         topic: String,
         cbUnsubscribe: IMqttActionListener = defaultCbUnsubscribe
     ) {
@@ -59,7 +59,7 @@ class MQTTClient(
         } catch (e: MqttException) {
             e.printStackTrace()
         }
-    }
+    }*/
 
     fun publish(
         topic: String,
@@ -79,13 +79,13 @@ class MQTTClient(
         }
     }
 
-    fun disconnect(cbDisconnect: IMqttActionListener = defaultCbDisconnect) {
+/*    fun disconnect(cbDisconnect: IMqttActionListener = defaultCbDisconnect) {
         try {
             mqttClient.disconnect(null, cbDisconnect)
         } catch (e: MqttException) {
             e.printStackTrace()
         }
-    }
+    }*/
 
     private val defaultCbConnect = object : IMqttActionListener {
         override fun onSuccess(asyncActionToken: IMqttToken?) {
@@ -118,7 +118,7 @@ class MQTTClient(
             Log.d(this.javaClass.name, "Failed to subscribe topic")
         }
     }
-    private val defaultCbUnsubscribe = object : IMqttActionListener {
+/*    private val defaultCbUnsubscribe = object : IMqttActionListener {
         override fun onSuccess(asyncActionToken: IMqttToken?) {
             Log.d(this.javaClass.name, "Unsubscribed to topic")
         }
@@ -126,7 +126,7 @@ class MQTTClient(
         override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
             Log.d(this.javaClass.name, "Failed to unsubscribe topic")
         }
-    }
+    }*/
     private val defaultCbPublish = object : IMqttActionListener {
         override fun onSuccess(asyncActionToken: IMqttToken?) {
             Log.d(this.javaClass.name, "Message published to topic")
@@ -136,7 +136,7 @@ class MQTTClient(
             Log.d(this.javaClass.name, "Failed to publish message to topic")
         }
     }
-    private val defaultCbDisconnect = object : IMqttActionListener {
+/*    private val defaultCbDisconnect = object : IMqttActionListener {
         override fun onSuccess(asyncActionToken: IMqttToken?) {
             Log.d(this.javaClass.name, "Disconnected")
         }
@@ -144,5 +144,5 @@ class MQTTClient(
         override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
             Log.d(this.javaClass.name, "Failed to disconnect")
         }
-    }
+    }*/
 }
