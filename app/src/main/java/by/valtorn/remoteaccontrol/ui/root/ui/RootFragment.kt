@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import by.valtorn.remoteaccontrol.R
 import by.valtorn.remoteaccontrol.databinding.FragmentRootBinding
+import by.valtorn.remoteaccontrol.model.AcFan
 import by.valtorn.remoteaccontrol.model.AcMode
 import by.valtorn.remoteaccontrol.ui.root.vm.RootVM
 import by.valtorn.remoteaccontrol.utils.DEBUG_TAG
@@ -48,13 +49,13 @@ class RootFragment : Fragment() {
     private fun initUI() {
         with(binding) {
             frTempSliderValue.text = getString(R.string.root_temperature_for_selector, 17)
+
             frTempSlider.addOnChangeListener { _, value, _ ->
                 frTempSliderValue.text = getString(R.string.root_temperature_for_selector, value.toInt())
                 viewModel.selectTemp(value.toInt())
             }
             frTempProgress.spin()
             frApply.setOnClickListener {
-                Log.i(DEBUG_TAG, "sending sendCmd press button")
                 viewModel.sendCmd()
             }
             frTurbo.setOnClickListener {
@@ -63,11 +64,47 @@ class RootFragment : Fragment() {
             frAcToggle.setOnClickListener {
                 viewModel.acTogglePower()
             }
-            frAcMode.minValue = 1
-            frAcMode.maxValue = AcMode.values().size
-            frAcMode.displayedValues = AcMode.values().map { it.name }.toTypedArray()
-            frAcMode.setOnValueChangedListener { _, _, newVal ->
-                viewModel.selectMode(AcMode.values()[newVal - 1])
+
+            frFanSlider.addOnChangeListener { _, value, _ ->
+                when (value.toInt()) {
+                    0 -> AcFan.Auto
+                    1 -> AcFan.Low
+                    2 -> AcFan.Med
+                    3 -> AcFan.High
+                    4 -> AcFan.Eco
+                    else -> null
+                }?.let {
+                    frFanSliderValue.text = when (value.toInt()) {
+                        0 -> getString(R.string.fan_auto)
+                        1 -> getString(R.string.fan_low)
+                        2 -> getString(R.string.fan_mid)
+                        3 -> getString(R.string.fan_high)
+                        4 -> getString(R.string.fan_eco)
+                        else -> String()
+                    }
+                    viewModel.setFan(it)
+                }
+            }
+
+            frBottomMenu.setOnItemSelectedListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.menu_cool -> viewModel.selectMode(AcMode.Cool)
+                    R.id.menu_dry -> viewModel.selectMode(AcMode.Dry)
+                    R.id.menu_heat -> viewModel.selectMode(AcMode.Heat)
+                    R.id.menu_auto -> viewModel.selectMode(AcMode.Auto)
+                    R.id.menu_fan -> viewModel.selectMode(AcMode.Fan)
+                }
+                true
+            }
+            frFanSlider.setLabelFormatter {
+                when (it.toInt()) {
+                    0 -> getString(R.string.fan_auto)
+                    1 -> getString(R.string.fan_low)
+                    2 -> getString(R.string.fan_mid)
+                    3 -> getString(R.string.fan_high)
+                    4 -> getString(R.string.fan_eco)
+                    else -> String()
+                }
             }
         }
     }
@@ -82,6 +119,7 @@ class RootFragment : Fragment() {
                     frTempProgress.stopSpinning()
                     frTemperature.text =
                         getString(R.string.root_temperature, it.temperature)
+                    frPressure.text = getString(R.string.root_pressure, it.getPressureMm())
                     frTemperatureSign.isGone = false
                     frTemperature.isGone = false
                 }
@@ -93,6 +131,9 @@ class RootFragment : Fragment() {
                 if (it.power == 1) Glide.with(activity).load(ContextCompat.getDrawable(activity, R.drawable.ic_power_on)).into(frAcToggle)
                 else Glide.with(activity).load(ContextCompat.getDrawable(activity, R.drawable.ic_power_off)).into(frAcToggle)
                 Log.i(DEBUG_TAG, "receive current state $it")
+            }
+            viewModel.currentState.observe(viewLifecycleOwner) {
+                Log.i(DEBUG_TAG, "cmd state $it")
             }
         }
     }

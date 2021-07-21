@@ -1,5 +1,7 @@
 package by.valtorn.remoteaccontrol.model
 
+import by.valtorn.remoteaccontrol.R
+
 data class AcState(
     val power: Int = AcPower.ON.value,
     val mode: Int = AcMode.Cool.ordinal,
@@ -12,24 +14,28 @@ data class AcState(
     val clean: Int = 0
 )
 
+@Suppress("Unused")
 enum class AcTurbo(val value: Int) {
     OFF(0),
     ON(1)
 }
 
+@Suppress("Unused")
 enum class AcPower(val value: Int) {
     OFF(0),
     ON(1)
 }
 
-enum class AcMode(val value: Int) {
-    Auto(0),
-    Cool(1),
-    Dry(2),
-    Fan(3),
-    Heat(4)
+@Suppress("Unused")
+enum class AcMode(val value: Int, val str: Int) {
+    Auto(0, R.string.menu_bottom_auto),
+    Cool(1, R.string.menu_bottom_cool),
+    Dry(2, R.string.menu_bottom_dry),
+    Fan(3, R.string.menu_bottom_fan),
+    Heat(4, R.string.menu_bottom_heat)
 }
 
+@Suppress("Unused")
 enum class AcFan(val value: Int) {
     Auto(0),
     Low(2),
@@ -39,6 +45,7 @@ enum class AcFan(val value: Int) {
     Eco(7)
 }
 
+@Suppress("Unused")
 enum class AcSwingV(val value: Int) {
     Off(1),
     Auto(2),
@@ -49,6 +56,7 @@ enum class AcSwingV(val value: Int) {
     Lowest(7)
 }
 
+@Suppress("Unused")
 enum class AcSwingH(val value: Int) {
     Off(1),
     Auto(2),

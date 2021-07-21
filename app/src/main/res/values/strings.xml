@@ -5,6 +5,17 @@
     <string name="root_temperature_celsius">\u2103</string>
     <string name="root_temperature_for_selector">%d\u2103</string>
     <string name="root_apply">Применить</string>
-    <string name="root_ac_off">выкл</string>
-    <string name="root_ac_on">вкл</string>
+    <string name="root_pressure">%d мм.рт.ст.</string>
+
+    <string name="menu_bottom_cool">Охлаждение</string>
+    <string name="menu_bottom_heat">Обогрев</string>
+    <string name="menu_bottom_dry">Чистка</string>
+    <string name="menu_bottom_fan">Вентилятор</string>
+    <string name="menu_bottom_auto">Автоматический</string>
+
+    <string name="fan_auto">Авто</string>
+    <string name="fan_low">Минимум</string>
+    <string name="fan_mid">Средний</string>
+    <string name="fan_high">Максимум</string>
+    <string name="fan_eco">Эко</string>
 </resources>

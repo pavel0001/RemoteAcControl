@@ -2,13 +2,8 @@ package by.valtorn.remoteaccontrol.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import by.valtorn.remoteaccontrol.model.AcMode
-import by.valtorn.remoteaccontrol.model.AcPower
-import by.valtorn.remoteaccontrol.model.AcState
-import by.valtorn.remoteaccontrol.model.AcTurbo
+import by.valtorn.remoteaccontrol.model.*
 import com.beust.klaxon.Klaxon
-import com.beust.klaxon.PropertyStrategy
-import kotlin.reflect.KProperty
 
 object CmdRepository {
 
@@ -23,13 +18,23 @@ object CmdRepository {
         mCurrentState.value = currentState.value?.copy(temp = temp)
     }
 
-    fun setPower(power: AcPower) {
+/*    fun setPower(power: AcPower) {
         mCurrentState.value = currentState.value?.copy(power = power.value)
+    }*/
+
+    fun setFan(fan: AcFan) {
+        mCurrentState.value = currentState.value?.copy(fan = fan.value)
     }
 
     fun togglePower() {
         currentState.value?.let {
-            mCurrentState.value = currentState.value?.copy(power = if (it.power == 0) 1 else 0)
+            mCurrentState.value = currentState.value?.copy(
+                power =
+                if (it.power == AcPower.OFF.value)
+                    AcPower.ON.value
+                else
+                    AcPower.OFF.value
+            )
         }
     }
 
@@ -37,7 +42,7 @@ object CmdRepository {
         mCurrentState.value = currentState.value?.copy(turbo = turbo.value)
     }
 
-    fun getJson() = Klaxon().toJsonString(currentState.value)
+    suspend fun getJson() = Klaxon().toJsonString(currentState.value)
 
     fun jsonToModel(json: String) = Klaxon().parse<AcState>(json)
 }
