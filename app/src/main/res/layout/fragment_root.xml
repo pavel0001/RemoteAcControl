@@ -101,7 +101,6 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="42dp"
         android:stepSize="1"
-        android:value="20.0"
         android:valueFrom="17"
         android:valueTo="30"
         app:layout_constraintEnd_toStartOf="@id/fr_temp_slider_value"
@@ -138,9 +137,8 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="24dp"
         android:stepSize="1"
-        android:value="3"
         android:valueFrom="0"
-        android:valueTo="4"
+        android:valueTo="5"
         app:layout_constraintEnd_toStartOf="@id/fr_fan_slider_value"
         app:layout_constraintStart_toEndOf="@id/fr_fan_icon"
         app:layout_constraintTop_toBottomOf="@id/fr_temp_slider" />
@@ -171,6 +169,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fr_fan_slider" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fr_sync"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_sync"
+        app:backgroundTint="#CDEEF1"
+        app:layout_constraintBottom_toTopOf="@id/fr_bottom_menu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="36dp"
+        tools:ignore="ContentDescription" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/fr_bottom_menu"

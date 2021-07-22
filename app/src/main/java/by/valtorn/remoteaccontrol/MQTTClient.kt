@@ -118,15 +118,16 @@ class MQTTClient(
             Log.d(this.javaClass.name, "Failed to subscribe topic")
         }
     }
-/*    private val defaultCbUnsubscribe = object : IMqttActionListener {
-        override fun onSuccess(asyncActionToken: IMqttToken?) {
-            Log.d(this.javaClass.name, "Unsubscribed to topic")
-        }
 
-        override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
-            Log.d(this.javaClass.name, "Failed to unsubscribe topic")
-        }
-    }*/
+    /*    private val defaultCbUnsubscribe = object : IMqttActionListener {
+            override fun onSuccess(asyncActionToken: IMqttToken?) {
+                Log.d(this.javaClass.name, "Unsubscribed to topic")
+            }
+
+            override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
+                Log.d(this.javaClass.name, "Failed to unsubscribe topic")
+            }
+        }*/
     private val defaultCbPublish = object : IMqttActionListener {
         override fun onSuccess(asyncActionToken: IMqttToken?) {
             Log.d(this.javaClass.name, "Message published to topic")

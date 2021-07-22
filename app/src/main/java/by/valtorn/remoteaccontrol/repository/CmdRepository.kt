@@ -10,6 +10,10 @@ object CmdRepository {
     private val mCurrentState = MutableLiveData(AcState())
     val currentState: LiveData<AcState> = mCurrentState
 
+    fun syncWithEsp(stateFromEsp: AcState) {
+        mCurrentState.value = stateFromEsp
+    }
+
     fun setMode(mode: AcMode) {
         mCurrentState.value = currentState.value?.copy(mode = mode.value)
     }
@@ -42,7 +46,7 @@ object CmdRepository {
         mCurrentState.value = currentState.value?.copy(turbo = turbo.value)
     }
 
-    suspend fun getJson() = Klaxon().toJsonString(currentState.value)
+    fun getJson() = Klaxon().toJsonString(currentState.value)
 
     fun jsonToModel(json: String) = Klaxon().parse<AcState>(json)
 }

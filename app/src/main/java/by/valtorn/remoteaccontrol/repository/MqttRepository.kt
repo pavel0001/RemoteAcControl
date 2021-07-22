@@ -44,6 +44,7 @@ object MqttRepository {
 
     fun connect() {
         mqttClient?.let {
+            if (it.isConnected()) return
             if (isConnectRun) return
             isConnectRun = true
             GlobalScope.launch(Dispatchers.IO) {

@@ -18,4 +18,5 @@
     <string name="fan_mid">Средний</string>
     <string name="fan_high">Максимум</string>
     <string name="fan_eco">Эко</string>
+    <string name="fan_turbo">Турбо</string>
 </resources>

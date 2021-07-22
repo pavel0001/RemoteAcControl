@@ -1,7 +1,6 @@
 package by.valtorn.remoteaccontrol.ui.root.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +16,6 @@ import by.valtorn.remoteaccontrol.databinding.FragmentRootBinding
 import by.valtorn.remoteaccontrol.model.AcFan
 import by.valtorn.remoteaccontrol.model.AcMode
 import by.valtorn.remoteaccontrol.ui.root.vm.RootVM
-import by.valtorn.remoteaccontrol.utils.DEBUG_TAG
 import com.bumptech.glide.Glide
 
 class RootFragment : Fragment() {
@@ -66,24 +64,8 @@ class RootFragment : Fragment() {
             }
 
             frFanSlider.addOnChangeListener { _, value, _ ->
-                when (value.toInt()) {
-                    0 -> AcFan.Auto
-                    1 -> AcFan.Low
-                    2 -> AcFan.Med
-                    3 -> AcFan.High
-                    4 -> AcFan.Eco
-                    else -> null
-                }?.let {
-                    frFanSliderValue.text = when (value.toInt()) {
-                        0 -> getString(R.string.fan_auto)
-                        1 -> getString(R.string.fan_low)
-                        2 -> getString(R.string.fan_mid)
-                        3 -> getString(R.string.fan_high)
-                        4 -> getString(R.string.fan_eco)
-                        else -> String()
-                    }
-                    viewModel.setFan(it)
-                }
+                frFanSliderValue.text = getString(AcFan.values().first { fan -> fan.numberSlider == value.toInt() }.str)
+                viewModel.setFan(AcFan.values().first { it.numberSlider == value.toInt() })
             }
 
             frBottomMenu.setOnItemSelectedListener { menuItem ->
@@ -97,14 +79,10 @@ class RootFragment : Fragment() {
                 true
             }
             frFanSlider.setLabelFormatter {
-                when (it.toInt()) {
-                    0 -> getString(R.string.fan_auto)
-                    1 -> getString(R.string.fan_low)
-                    2 -> getString(R.string.fan_mid)
-                    3 -> getString(R.string.fan_high)
-                    4 -> getString(R.string.fan_eco)
-                    else -> String()
-                }
+                getString(AcFan.values().first { fan -> fan.numberSlider == it.toInt() }.str)
+            }
+            frSync.setOnClickListener {
+                viewModel.syncWithCurrent()
             }
         }
     }
@@ -112,6 +90,9 @@ class RootFragment : Fragment() {
     private fun initVM(activity: FragmentActivity) {
         with(binding) {
             viewModel.mqttProgress.observe(viewLifecycleOwner) {
+                frProgress.updateProgressState(it)
+            }
+            viewModel.syncProgress.observe(viewLifecycleOwner) {
                 frProgress.updateProgressState(it)
             }
             viewModel.receivedMessage.observe(viewLifecycleOwner) { receivedMessage ->
@@ -127,13 +108,18 @@ class RootFragment : Fragment() {
             viewModel.publishResult.observe(viewLifecycleOwner) {
                 Toast.makeText(activity, it.str, Toast.LENGTH_SHORT).show()
             }
-            viewModel.currentAcState.observe(viewLifecycleOwner) {
+            viewModel.syncState.observe(viewLifecycleOwner) {
                 if (it.power == 1) Glide.with(activity).load(ContextCompat.getDrawable(activity, R.drawable.ic_power_on)).into(frAcToggle)
                 else Glide.with(activity).load(ContextCompat.getDrawable(activity, R.drawable.ic_power_off)).into(frAcToggle)
-                Log.i(DEBUG_TAG, "receive current state $it")
-            }
-            viewModel.currentState.observe(viewLifecycleOwner) {
-                Log.i(DEBUG_TAG, "cmd state $it")
+                frFanSlider.value = AcFan.values().first { fan -> fan.value == it.fan }.numberSlider.toFloat()
+                frTempSlider.value = it.temp.toFloat()
+                frBottomMenu.selectedItemId = when (it.mode) {
+                    AcMode.Dry.ordinal -> R.id.menu_dry
+                    AcMode.Heat.ordinal -> R.id.menu_heat
+                    AcMode.Auto.ordinal -> R.id.menu_auto
+                    AcMode.Fan.ordinal -> R.id.menu_fan
+                    else -> R.id.menu_cool
+                }
             }
         }
     }

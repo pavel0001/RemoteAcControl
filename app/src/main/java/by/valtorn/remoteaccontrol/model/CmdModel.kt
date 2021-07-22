@@ -36,13 +36,13 @@ enum class AcMode(val value: Int, val str: Int) {
 }
 
 @Suppress("Unused")
-enum class AcFan(val value: Int) {
-    Auto(0),
-    Low(2),
-    Med(3),
-    High(4),
-    Turbo(6),
-    Eco(7)
+enum class AcFan(val value: Int, val numberSlider: Int, val str: Int) {
+    Auto(0, 0, R.string.fan_auto),
+    Low(2, 1, R.string.fan_low),
+    Med(3, 2, R.string.fan_mid),
+    High(4, 3, R.string.fan_high),
+    Turbo(6, 5, R.string.fan_turbo),
+    Eco(7, 4, R.string.fan_eco)
 }
 
 @Suppress("Unused")
