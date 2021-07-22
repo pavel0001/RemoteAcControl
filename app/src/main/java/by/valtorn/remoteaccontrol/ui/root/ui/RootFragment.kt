@@ -23,6 +23,8 @@ class RootFragment : Fragment() {
     private val viewModel by viewModels<RootVM>()
     private val binding by viewBinding(FragmentRootBinding::bind)
 
+    private var powerButtonState = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,13 +48,12 @@ class RootFragment : Fragment() {
 
     private fun initUI() {
         with(binding) {
+            frTempProgress.spin()
             frTempSliderValue.text = getString(R.string.root_temperature_for_selector, 17)
-
             frTempSlider.addOnChangeListener { _, value, _ ->
                 frTempSliderValue.text = getString(R.string.root_temperature_for_selector, value.toInt())
                 viewModel.selectTemp(value.toInt())
             }
-            frTempProgress.spin()
             frApply.setOnClickListener {
                 viewModel.sendCmd()
             }
@@ -61,6 +62,7 @@ class RootFragment : Fragment() {
             }
             frAcToggle.setOnClickListener {
                 viewModel.acTogglePower()
+                togglePoserBtn()
             }
 
             frFanSlider.addOnChangeListener { _, value, _ ->
@@ -92,9 +94,11 @@ class RootFragment : Fragment() {
             viewModel.mqttProgress.observe(viewLifecycleOwner) {
                 frProgress.updateProgressState(it)
             }
+
             viewModel.syncProgress.observe(viewLifecycleOwner) {
                 frProgress.updateProgressState(it)
             }
+
             viewModel.receivedMessage.observe(viewLifecycleOwner) { receivedMessage ->
                 receivedMessage?.let {
                     frTempProgress.stopSpinning()
@@ -105,10 +109,13 @@ class RootFragment : Fragment() {
                     frTemperature.isGone = false
                 }
             }
+
             viewModel.publishResult.observe(viewLifecycleOwner) {
                 Toast.makeText(activity, it.str, Toast.LENGTH_SHORT).show()
             }
+
             viewModel.syncState.observe(viewLifecycleOwner) {
+                powerButtonState = it.power == 1
                 if (it.power == 1) Glide.with(activity).load(ContextCompat.getDrawable(activity, R.drawable.ic_power_on)).into(frAcToggle)
                 else Glide.with(activity).load(ContextCompat.getDrawable(activity, R.drawable.ic_power_off)).into(frAcToggle)
                 frFanSlider.value = AcFan.values().first { fan -> fan.value == it.fan }.numberSlider.toFloat()
@@ -120,6 +127,19 @@ class RootFragment : Fragment() {
                     AcMode.Fan.ordinal -> R.id.menu_fan
                     else -> R.id.menu_cool
                 }
+            }
+
+        }
+    }
+
+    private fun togglePoserBtn() {
+        with(binding) {
+            if (powerButtonState) {
+                frAcToggle.setImageResource(R.drawable.ic_power_off)
+                powerButtonState = false
+            } else {
+                frAcToggle.setImageResource(R.drawable.ic_power_on)
+                powerButtonState = true
             }
         }
     }
