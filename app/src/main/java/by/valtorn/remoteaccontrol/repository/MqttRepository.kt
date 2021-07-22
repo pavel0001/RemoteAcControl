@@ -5,7 +5,14 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import by.valtorn.remoteaccontrol.MQTTClient
+import by.valtorn.remoteaccontrol.model.AcState
+import by.valtorn.remoteaccontrol.model.SensorResponse
+import by.valtorn.remoteaccontrol.repository.CmdRepository.jsonToModel
 import by.valtorn.remoteaccontrol.utils.*
+import com.beust.klaxon.Klaxon
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.eclipse.paho.client.mqttv3.*
 
 object MqttRepository {
@@ -18,16 +25,33 @@ object MqttRepository {
     private val mPublishResult = MutableLiveData<RequestResult>()
     val publishResult: LiveData<RequestResult> = mPublishResult
 
-    private val mReceivedMessage = MutableLiveData<MessageMqtt>()
-    val receivedMessage: LiveData<MessageMqtt> = mReceivedMessage
+    private val mReceivedMessage = MutableLiveData<SensorResponse>()
+    val receivedMessage: LiveData<SensorResponse> = mReceivedMessage
+
+    private val mCurrentAcState = MutableLiveData<AcState>()
+    val currentAcState: LiveData<AcState> = mCurrentAcState
+
+    private var isConnectRun: Boolean = false
 
     fun initializeAndConnect(context: Context) {
         mMqttProgress.value = true
         MQTTClient(context).let {
             mqttClient = it
-            it.connect(cbConnect = connectCallback, cbClient = clientCallback)
         }
+        connect()
         mMqttProgress.value = false
+    }
+
+    fun connect() {
+        mqttClient?.let {
+            if (it.isConnected()) return
+            if (isConnectRun) return
+            isConnectRun = true
+            GlobalScope.launch(Dispatchers.IO) {
+                it.connect(cbConnect = connectCallback, cbClient = clientCallback)
+                isConnectRun = false
+            }
+        }
     }
 
     private fun publishCmd(topic: String, cmd: String) {
@@ -41,35 +65,13 @@ object MqttRepository {
         Log.i(DEBUG_TAG, "publishCmd topic $topic cmd = $cmd")
     }
 
-    fun acOn() {
-        publishCmd(MQTT_TOPIC_AC_RUN, AC_COMMAND_ON)
-    }
-
-    fun acOff() {
-        publishCmd(MQTT_TOPIC_AC_RUN, AC_COMMAND_OFF)
-    }
-
-    fun acMode(mode: AcMode) {
-        publishCmd(MQTT_TOPIC_AC_MODE, mode.str)
-    }
-
-    fun acTempHeat(temp: Int) {
-        publishCmd(MQTT_TOPIC_AC_TEMP_HEAT, temp.toString())
-    }
-
-    fun acTempCool(temp: Int) {
-        publishCmd(MQTT_TOPIC_AC_TEMP_COOL, temp.toString())
+    fun sendJsonCmd(json: String) {
+        Log.i(DEBUG_TAG, "sending json $json")
+        publishCmd(MQTT_TOPIC_JSON_CMD, json)
     }
 
     private fun subscribe() {
-        mqttClient?.subscribe(topic = MQTT_TOPIC_ROOT, qos = 1)
-    }
-
-    fun reconnect() {
-        mqttClient?.let {
-            if (it.isConnected())
-                it.connect()
-        }
+        mqttClient?.subscribe(topic = "$MQTT_TOPIC_ROOT+", qos = 1)
     }
 
     private val connectCallback = object : IMqttActionListener {
@@ -78,17 +80,28 @@ object MqttRepository {
         }
 
         override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
-            reconnect()
+            connect()
         }
     }
 
     private val clientCallback = object : MqttCallback {
         override fun messageArrived(topic: String?, message: MqttMessage?) {
-            mReceivedMessage.value = MessageMqtt(topic, message)
+            when (topic) {
+                MQTT_TOPIC_SENSOR -> {
+                    Klaxon().parse<SensorResponse>(message.toString())?.let { data ->
+                        mReceivedMessage.value = data
+                    }
+                }
+                MQTT_TOPIC_CALLBACK -> {
+                    jsonToModel(message.toString())?.let {
+                        mCurrentAcState.value = it
+                    }
+                }
+            }
         }
 
         override fun connectionLost(cause: Throwable?) {
-            reconnect()
+            connect()
             Log.d(DEBUG_TAG, "Connection lost ${cause.toString()}")
         }
 
@@ -101,7 +114,7 @@ object MqttRepository {
     private val publishCallback = object : IMqttActionListener {
         override fun onSuccess(asyncActionToken: IMqttToken?) {
             Log.d(DEBUG_TAG, "Message published to topic")
-            mPublishResult.value = RequestResult.SUCCES
+            mPublishResult.value = RequestResult.SUCCESS
 
         }
 
@@ -112,14 +125,7 @@ object MqttRepository {
     }
 
     enum class RequestResult(val str: String) {
-        SUCCES("Доставлено"),
+        SUCCESS("Доставлено"),
         FAIL("Ошибка")
-    }
-
-    data class MessageMqtt(val topic: String?, val message: MqttMessage?) {
-
-        fun getTemperatureFloat() = this.message?.payload?.decodeToString()?.toFloat()
-
-        fun getPressureInt() = this.message?.payload?.decodeToString()?.toInt()
     }
 }

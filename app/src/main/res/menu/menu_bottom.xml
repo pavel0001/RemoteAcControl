@@ -1,0 +1,32 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_cool"
+        android:enabled="true"
+        android:icon="@drawable/ic_cool"
+        android:title="@string/menu_bottom_cool" />
+
+    <item
+        android:id="@+id/menu_dry"
+        android:enabled="true"
+        android:icon="@drawable/ic_clean"
+        android:title="@string/menu_bottom_dry" />
+
+    <item
+        android:id="@+id/menu_fan"
+        android:enabled="true"
+        android:icon="@drawable/ic_fan"
+        android:title="@string/menu_bottom_fan" />
+
+    <item
+        android:id="@+id/menu_auto"
+        android:enabled="true"
+        android:icon="@drawable/ic_auto"
+        android:title="@string/menu_bottom_auto" />
+
+    <item
+        android:id="@+id/menu_heat"
+        android:enabled="true"
+        android:icon="@drawable/ic_heat"
+        android:title="@string/menu_bottom_heat" />
+</menu>
