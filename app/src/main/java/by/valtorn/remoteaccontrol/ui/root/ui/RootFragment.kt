@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -16,7 +15,6 @@ import by.valtorn.remoteaccontrol.databinding.FragmentRootBinding
 import by.valtorn.remoteaccontrol.model.AcFan
 import by.valtorn.remoteaccontrol.model.AcMode
 import by.valtorn.remoteaccontrol.ui.root.vm.RootVM
-import com.bumptech.glide.Glide
 
 class RootFragment : Fragment() {
 
@@ -116,8 +114,8 @@ class RootFragment : Fragment() {
 
             viewModel.syncState.observe(viewLifecycleOwner) {
                 powerButtonState = it.power == 1
-                if (it.power == 1) Glide.with(activity).load(ContextCompat.getDrawable(activity, R.drawable.ic_power_on)).into(frAcToggle)
-                else Glide.with(activity).load(ContextCompat.getDrawable(activity, R.drawable.ic_power_off)).into(frAcToggle)
+                if (it.power == 1) frAcToggle.setImageResource(R.drawable.ic_power_on)
+                else frAcToggle.setImageResource(R.drawable.ic_power_off)
                 frFanSlider.value = AcFan.values().first { fan -> fan.value == it.fan }.numberSlider.toFloat()
                 frTempSlider.value = it.temp.toFloat()
                 frBottomMenu.selectedItemId = when (it.mode) {

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mqtt Controller</string>
+
+    <string name="root_temperature">%.0f</string>
+    <string name="root_temperature_celsius">\u2103</string>
+    <string name="root_temperature_for_selector">%d\u2103</string>
+    <string name="root_apply">Apply</string>
+    <string name="root_pressure">%d mm.hg.s.</string>
+
+    <string name="menu_bottom_cool">Cool</string>
+    <string name="menu_bottom_heat">Heat</string>
+    <string name="menu_bottom_dry">Dry</string>
+    <string name="menu_bottom_fan">Fan</string>
+    <string name="menu_bottom_auto">Auto</string>
+
+    <string name="fan_auto">Auto</string>
+    <string name="fan_low">Min</string>
+    <string name="fan_mid">Middle</string>
+    <string name="fan_high">Max</string>
+    <string name="fan_eco">Eco</string>
+    <string name="fan_turbo">Turbo</string>
+</resources>
