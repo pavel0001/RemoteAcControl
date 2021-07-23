@@ -1,20 +1,16 @@
-package by.valtorn.remoteaccontrol.ui.root.ui
+package by.pzmandroid.mac.ui.root.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
-import by.valtorn.remoteaccontrol.R
-import by.valtorn.remoteaccontrol.databinding.FragmentRootBinding
-import by.valtorn.remoteaccontrol.model.AcFan
-import by.valtorn.remoteaccontrol.model.AcMode
-import by.valtorn.remoteaccontrol.ui.root.vm.RootVM
+import by.pzmandroid.mac.R
+import by.pzmandroid.mac.databinding.FragmentRootBinding
+import by.pzmandroid.mac.ui.root.vm.RootVM
 
 class RootFragment : Fragment() {
 

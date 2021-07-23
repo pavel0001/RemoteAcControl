@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Mqtt Controller</string>
+    <string name="app_name">MAC</string>
 
     <string name="root_temperature">%.0f</string>
     <string name="root_temperature_celsius">\u2103</string>

@@ -6,5 +6,5 @@
 
     <fragment
         android:id="@+id/rootFragment"
-        android:name="by.valtorn.remoteaccontrol.ui.root.ui.RootFragment" />
+        android:name="by.pzmandroid.mac.ui.root.ui.RootFragment" />
 </navigation>

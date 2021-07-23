@@ -1,14 +1,14 @@
-package by.valtorn.remoteaccontrol.repository
+package by.pzmandroid.mac.repository
 
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import by.valtorn.remoteaccontrol.MQTTClient
-import by.valtorn.remoteaccontrol.model.AcState
-import by.valtorn.remoteaccontrol.model.SensorResponse
-import by.valtorn.remoteaccontrol.repository.CmdRepository.jsonToModel
-import by.valtorn.remoteaccontrol.utils.*
+import by.pzmandroid.mac.MQTTClient
+import by.pzmandroid.mac.model.AcState
+import by.pzmandroid.mac.model.SensorResponse
+import by.pzmandroid.mac.repository.CmdRepository.jsonToModel
+import by.pzmandroid.mac.utils.*
 import com.beust.klaxon.Klaxon
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

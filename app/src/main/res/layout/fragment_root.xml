@@ -13,6 +13,16 @@
         android:background="@drawable/bg_root_grad"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/fr_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="32dp"
+        android:src="@drawable/ic_settings"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
     <com.pnikosis.materialishprogress.ProgressWheel
         android:id="@+id/fr_temp_progress"
         android:layout_width="80dp"
@@ -191,7 +201,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/menu_bottom" />
 
-    <by.valtorn.remoteaccontrol.utils.view.ProgressView
+    <by.pzmandroid.mac.utils.view.ProgressView
         android:id="@+id/fr_progress"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

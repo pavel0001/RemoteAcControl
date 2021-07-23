@@ -1,6 +1,6 @@
-package by.valtorn.remoteaccontrol.model
+package by.pzmandroid.mac.model
 
-import by.valtorn.remoteaccontrol.R
+import by.pzmandroid.mac.R
 
 data class AcState(
     val power: Int = AcPower.ON.value,

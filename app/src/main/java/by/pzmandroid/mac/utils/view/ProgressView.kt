@@ -1,12 +1,11 @@
-package by.valtorn.remoteaccontrol.utils.view
+package by.pzmandroid.mac.utils.view
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
-import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
-import by.valtorn.remoteaccontrol.databinding.ViewProgressBinding
+import by.pzmandroid.mac.databinding.ViewProgressBinding
 
 class ProgressView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0

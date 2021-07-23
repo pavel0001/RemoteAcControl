@@ -1,4 +1,4 @@
-package by.valtorn.remoteaccontrol.utils
+package by.pzmandroid.mac.utils
 
 fun IntRange.toIntArray(): IntArray {
     if (last < first)

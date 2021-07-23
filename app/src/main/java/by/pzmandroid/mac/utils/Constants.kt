@@ -1,4 +1,4 @@
-package by.valtorn.remoteaccontrol.utils
+package by.pzmandroid.mac.utils
 
 const val DEBUG_TAG = "MyTagForMQTT"
 const val MQTT_SERVER_URI = "tcp://test.mosquitto.org:1883"

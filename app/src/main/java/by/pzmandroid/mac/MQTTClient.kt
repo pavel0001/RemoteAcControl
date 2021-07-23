@@ -1,11 +1,11 @@
-package by.valtorn.remoteaccontrol
+package by.pzmandroid.mac
 
 import android.content.Context
 import android.util.Log
-import by.valtorn.remoteaccontrol.utils.MQTT_CLIENT_ID
-import by.valtorn.remoteaccontrol.utils.MQTT_PWD
-import by.valtorn.remoteaccontrol.utils.MQTT_SERVER_URI
-import by.valtorn.remoteaccontrol.utils.MQTT_USERNAME
+import by.pzmandroid.mac.utils.MQTT_CLIENT_ID
+import by.pzmandroid.mac.utils.MQTT_PWD
+import by.pzmandroid.mac.utils.MQTT_SERVER_URI
+import by.pzmandroid.mac.utils.MQTT_USERNAME
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
 
