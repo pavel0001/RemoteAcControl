@@ -19,4 +19,13 @@
     <string name="fan_high">Максимум</string>
     <string name="fan_eco">Эко</string>
     <string name="fan_turbo">Турбо</string>
+
+    <!-- Preference Titles -->
+    <string name="preferences_mqtt">Mqtt брокер</string>
+    <!-- Messages Preferences -->
+    <string name="preferences_mqtt_server">mqtt ip: port</string>
+    <string name="preferences_mqtt_login">Логин</string>
+    <string name="preferences_mqtt_pwd">Пароль</string>
+    <string name="preferences_mqtt_client">Client ID</string>
+    <string name="preferences_mqtt_topic"> Топик</string>
 </resources>

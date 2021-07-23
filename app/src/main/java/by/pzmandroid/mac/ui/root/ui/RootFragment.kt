@@ -4,12 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import by.pzmandroid.mac.R
 import by.pzmandroid.mac.databinding.FragmentRootBinding
+import by.pzmandroid.mac.model.AcFan
+import by.pzmandroid.mac.model.AcMode
 import by.pzmandroid.mac.ui.root.vm.RootVM
 
 class RootFragment : Fragment() {
@@ -58,7 +63,9 @@ class RootFragment : Fragment() {
                 viewModel.acTogglePower()
                 togglePoserBtn()
             }
-
+            frSettings.setOnClickListener {
+                findNavController().navigate(RootFragmentDirections.toSettingsFragment())
+            }
             frFanSlider.addOnChangeListener { _, value, _ ->
                 frFanSliderValue.text = getString(AcFan.values().first { fan -> fan.numberSlider == value.toInt() }.str)
                 viewModel.setFan(AcFan.values().first { it.numberSlider == value.toInt() })
@@ -128,12 +135,12 @@ class RootFragment : Fragment() {
 
     private fun togglePoserBtn() {
         with(binding) {
-            if (powerButtonState) {
+            powerButtonState = if (powerButtonState) {
                 frAcToggle.setImageResource(R.drawable.ic_power_off)
-                powerButtonState = false
+                false
             } else {
                 frAcToggle.setImageResource(R.drawable.ic_power_on)
-                powerButtonState = true
+                true
             }
         }
     }
