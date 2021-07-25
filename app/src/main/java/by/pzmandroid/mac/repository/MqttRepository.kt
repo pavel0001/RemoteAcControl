@@ -8,7 +8,7 @@ import by.pzmandroid.mac.MQTTClient
 import by.pzmandroid.mac.model.AcState
 import by.pzmandroid.mac.model.SensorResponse
 import by.pzmandroid.mac.repository.CmdRepository.jsonToModel
-import by.pzmandroid.mac.utils.*
+import by.pzmandroid.mac.utils.DEBUG_TAG
 import com.beust.klaxon.Klaxon
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -18,9 +18,18 @@ import org.eclipse.paho.client.mqttv3.*
 object MqttRepository {
 
     private var mqttClient: MQTTClient? = null
+    private var mqttTestClient: MQTTClient? = null
+
+    lateinit var credits: CredRepository.Credits
 
     private val mMqttProgress = MutableLiveData(false)
     val mqttProgress: LiveData<Boolean> = mMqttProgress
+
+    private val mMqttTestProgress = MutableLiveData(false)
+    val mqttTestProgress: LiveData<Boolean> = mMqttTestProgress
+
+    private val mMqttTestResult = MutableLiveData<RequestResult>()
+    val mqttTestResult: LiveData<RequestResult> = mMqttTestResult
 
     private val mPublishResult = MutableLiveData<RequestResult>()
     val publishResult: LiveData<RequestResult> = mPublishResult
@@ -34,12 +43,45 @@ object MqttRepository {
     private var isConnectRun: Boolean = false
 
     fun initializeAndConnect(context: Context) {
+        credits = CredRepository.getCredits()
         mMqttProgress.value = true
-        MQTTClient(context).let {
+        MQTTClient(context, credits.server, credits.clientId).let {
             mqttClient = it
         }
         connect()
         mMqttProgress.value = false
+    }
+
+    fun testConnection(
+        context: Context,
+        server: String,
+        clientId: String,
+        user: String,
+        pwd: String
+    ) {
+        credits = CredRepository.getCredits()
+        mMqttTestProgress.value = true
+        MQTTClient(context, server, clientId).let {
+            mqttTestClient = it
+        }
+        testConnect(user, pwd)
+        mMqttTestProgress.value = false
+    }
+
+    private fun testConnect(user: String, pwd: String) {
+        mqttTestClient?.let {
+            if (it.isConnected()) return
+            if (isConnectRun) return
+            isConnectRun = true
+            GlobalScope.launch(Dispatchers.IO) {
+                it.connect(
+                    username = user,
+                    password = pwd,
+                    cbConnect = testConnectCallback
+                )
+                isConnectRun = false
+            }
+        }
     }
 
     fun connect() {
@@ -48,30 +90,35 @@ object MqttRepository {
             if (isConnectRun) return
             isConnectRun = true
             GlobalScope.launch(Dispatchers.IO) {
-                it.connect(cbConnect = connectCallback, cbClient = clientCallback)
+                it.connect(
+                    username = credits.login,
+                    password = credits.pwd,
+                    cbConnect = connectCallback,
+                    cbClient = clientCallback
+                )
                 isConnectRun = false
             }
         }
     }
 
-    private fun publishCmd(topic: String, cmd: String) {
+    private fun publishCmd(cmd: String) {
         mMqttProgress.value = true
         mqttClient?.publish(
-            topic = topic,
+            topic = credits.MQTT_TOPIC_JSON_CMD,
             msg = cmd,
             qos = 1,
             cbPublish = publishCallback
         )
-        Log.i(DEBUG_TAG, "publishCmd topic $topic cmd = $cmd")
+        Log.i(DEBUG_TAG, "publishCmd topic ${credits.MQTT_TOPIC_JSON_CMD} cmd = $cmd")
     }
 
     fun sendJsonCmd(json: String) {
         Log.i(DEBUG_TAG, "sending json $json")
-        publishCmd(MQTT_TOPIC_JSON_CMD, json)
+        publishCmd(json)
     }
 
     private fun subscribe() {
-        mqttClient?.subscribe(topic = "$MQTT_TOPIC_ROOT+", qos = 1)
+        mqttClient?.subscribe(topic = "${credits.topic}+", qos = 1)
     }
 
     private val connectCallback = object : IMqttActionListener {
@@ -84,15 +131,30 @@ object MqttRepository {
         }
     }
 
+    private val testConnectCallback = object : IMqttActionListener {
+        override fun onSuccess(asyncActionToken: IMqttToken?) {
+            mMqttTestResult.value = RequestResult.SUCCESS
+
+            mqttTestClient?.let {
+                if (it.isConnected())
+                    it.disconnect()
+            }
+        }
+
+        override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
+            mMqttTestResult.value = RequestResult.FAIL
+        }
+    }
+
     private val clientCallback = object : MqttCallback {
         override fun messageArrived(topic: String?, message: MqttMessage?) {
             when (topic) {
-                MQTT_TOPIC_SENSOR -> {
+                credits.MQTT_TOPIC_SENSOR -> {
                     Klaxon().parse<SensorResponse>(message.toString())?.let { data ->
                         mReceivedMessage.value = data
                     }
                 }
-                MQTT_TOPIC_CALLBACK -> {
+                credits.MQTT_TOPIC_CALLBACK -> {
                     jsonToModel(message.toString())?.let {
                         mCurrentAcState.value = it
                     }

@@ -28,4 +28,9 @@
     <string name="preferences_mqtt_pwd">Пароль</string>
     <string name="preferences_mqtt_client">Client ID</string>
     <string name="preferences_mqtt_topic"> Топик</string>
+
+    <string name="setting_test_connection">Тест соединения</string>
+    <string name="setting_apply">Применить</string>
+    <string name="setting_demo_preset">Тестовые настройки</string>
+
 </resources>

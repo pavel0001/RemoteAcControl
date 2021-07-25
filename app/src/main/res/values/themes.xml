@@ -15,6 +15,28 @@
         <item name="android:windowBackground">@drawable/bg_lines_dots</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:scaleType">centerCrop</item>
+        <item name="MacColorLightBgPrimary">@color/colorCatSkillWhite</item>
+        <item name="MacColorLightBg">@color/colorWhite</item>
+        <item name="MacColorAccentBg">@color/colorMinskTransparent</item>
+        <item name="MacColorUtilityBg">@color/colorWhisper</item>
+        <item name="MacColorSecondaryBg">@color/colorAlabaster</item>
+        <item name="MacColorPrimaryText">@color/colorCharade</item>
+        <item name="MacColorInversedText">@color/colorWhite</item>
+        <item name="MacColorSecondaryText">@color/colorMinsk</item>
+        <item name="MacColorDarkIcon">@color/colorRaven</item>
         <!-- Customize your theme here. -->
+    </style>
+
+    <style name="MacInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="errorEnabled">false</item>
+        <item name="boxStrokeColor">@drawable/text_input_selector</item>
+        <item name="android:textColorHint">@drawable/text_input_selector</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="MacTextButton" parent="Widget.AppCompat.TextView">
+        <item name="background">@drawable/bg_stroke_button</item>
+        <item name="android:textSize">26sp</item>
     </style>
 </resources>

@@ -29,4 +29,8 @@
     <string name="preferences_mqtt_pwd">Password</string>
     <string name="preferences_mqtt_client">Client ID</string>
     <string name="preferences_mqtt_topic">Topic</string>
+
+    <string name="setting_test_connection">Test connection</string>
+    <string name="setting_apply">Apply</string>
+    <string name="setting_demo_preset">Test preset</string>
 </resources>

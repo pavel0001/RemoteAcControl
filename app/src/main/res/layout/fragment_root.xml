@@ -174,7 +174,6 @@
         android:paddingHorizontal="16dp"
         android:paddingVertical="8dp"
         android:text="@string/root_apply"
-        android:textSize="26sp"
         app:layout_constraintBottom_toTopOf="@id/fr_bottom_menu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

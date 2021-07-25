@@ -17,19 +17,12 @@ import by.pzmandroid.mac.model.AcFan
 import by.pzmandroid.mac.model.AcMode
 import by.pzmandroid.mac.ui.root.vm.RootVM
 
-class RootFragment : Fragment() {
+class RootFragment : Fragment(R.layout.fragment_root) {
 
     private val viewModel by viewModels<RootVM>()
     private val binding by viewBinding(FragmentRootBinding::bind)
 
     private var powerButtonState = false
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_root, container, false)
-    }
 
     override fun onResume() {
         super.onResume()
@@ -64,7 +57,7 @@ class RootFragment : Fragment() {
                 togglePoserBtn()
             }
             frSettings.setOnClickListener {
-                findNavController().navigate(RootFragmentDirections.toSettingsFragment())
+                findNavController().navigate(RootFragmentDirections.toSettings())
             }
             frFanSlider.addOnChangeListener { _, value, _ ->
                 frFanSliderValue.text = getString(AcFan.values().first { fan -> fan.numberSlider == value.toInt() }.str)

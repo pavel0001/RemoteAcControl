@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="colorOnSurface" format="color" />
+    <attr name="MacColorLightBg" format="color" />
+    <attr name="MacColorLightBgPrimary" format="color" />
+    <attr name="MacColorAccentBg" format="color" />
+    <attr name="MacColorUtilityBg" format="color" />
+    <attr name="MacColorSecondaryBg" format="color" />
+    <attr name="MacColorInversedText" format="color" />
+    <attr name="MacColorPrimaryText" format="color" />
+    <attr name="MacColorSecondaryText" format="color" />
+    <attr name="MacColorDarkIcon" format="color" />
 </resources>

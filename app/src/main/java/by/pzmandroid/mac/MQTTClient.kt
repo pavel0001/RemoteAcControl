@@ -11,14 +11,14 @@ import org.eclipse.paho.client.mqttv3.*
 
 class MQTTClient(
     context: Context?,
-    serverURI: String = MQTT_SERVER_URI,
-    clientID: String = MQTT_CLIENT_ID
+    serverURI: String,
+    clientID: String
 ) {
     private var mqttClient = MqttAndroidClient(context, serverURI, clientID)
 
     fun connect(
-        username: String = MQTT_USERNAME,
-        password: String = MQTT_PWD,
+        username: String,
+        password: String,
         cbConnect: IMqttActionListener = defaultCbConnect,
         cbClient: MqttCallback = defaultCbClient
     ) {
@@ -79,13 +79,13 @@ class MQTTClient(
         }
     }
 
-/*    fun disconnect(cbDisconnect: IMqttActionListener = defaultCbDisconnect) {
+    fun disconnect(cbDisconnect: IMqttActionListener = defaultCbDisconnect) {
         try {
             mqttClient.disconnect(null, cbDisconnect)
         } catch (e: MqttException) {
             e.printStackTrace()
         }
-    }*/
+    }
 
     private val defaultCbConnect = object : IMqttActionListener {
         override fun onSuccess(asyncActionToken: IMqttToken?) {
@@ -137,7 +137,7 @@ class MQTTClient(
             Log.d(this.javaClass.name, "Failed to publish message to topic")
         }
     }
-/*    private val defaultCbDisconnect = object : IMqttActionListener {
+    private val defaultCbDisconnect = object : IMqttActionListener {
         override fun onSuccess(asyncActionToken: IMqttToken?) {
             Log.d(this.javaClass.name, "Disconnected")
         }
@@ -145,5 +145,5 @@ class MQTTClient(
         override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
             Log.d(this.javaClass.name, "Failed to disconnect")
         }
-    }*/
+    }
 }

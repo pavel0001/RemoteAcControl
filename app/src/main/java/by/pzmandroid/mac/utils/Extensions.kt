@@ -1,5 +1,7 @@
 package by.pzmandroid.mac.utils
 
+import java.util.regex.Pattern
+
 fun IntRange.toIntArray(): IntArray {
     if (last < first)
         return IntArray(0)
