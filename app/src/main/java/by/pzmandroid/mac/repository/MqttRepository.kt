@@ -17,13 +17,7 @@ import org.eclipse.paho.client.mqttv3.*
 
 object MqttRepository {
 
-    private var mqttClient: MQTTClient? = null
     private var mqttTestClient: MQTTClient? = null
-
-    lateinit var credits: CredRepository.Credits
-
-    private val mMqttProgress = MutableLiveData(false)
-    val mqttProgress: LiveData<Boolean> = mMqttProgress
 
     private val mMqttTestProgress = MutableLiveData(false)
     val mqttTestProgress: LiveData<Boolean> = mMqttTestProgress
@@ -31,8 +25,18 @@ object MqttRepository {
     private val mMqttTestResult = MutableLiveData<RequestResult>()
     val mqttTestResult: LiveData<RequestResult> = mMqttTestResult
 
+    private var mqttClient: MQTTClient? = null
+
+    lateinit var credits: CredRepository.Credits
+
+    private val mMqttProgress = MutableLiveData(false)
+    val mqttProgress: LiveData<Boolean> = mMqttProgress
+
     private val mPublishResult = MutableLiveData<RequestResult>()
     val publishResult: LiveData<RequestResult> = mPublishResult
+
+    private val mConnectResult = MutableLiveData<RequestResult>()
+    val connectResult: LiveData<RequestResult> = mConnectResult
 
     private val mReceivedMessage = MutableLiveData<SensorResponse>()
     val receivedMessage: LiveData<SensorResponse> = mReceivedMessage
@@ -123,11 +127,13 @@ object MqttRepository {
 
     private val connectCallback = object : IMqttActionListener {
         override fun onSuccess(asyncActionToken: IMqttToken?) {
+            mConnectResult.value = RequestResult.SUCCESS
             subscribe()
         }
 
         override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
-            connect()
+            mConnectResult.value = RequestResult.FAIL
+            Log.i(DEBUG_TAG, "fail connect")
         }
     }
 

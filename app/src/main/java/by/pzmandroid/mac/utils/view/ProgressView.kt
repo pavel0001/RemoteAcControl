@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isGone
 import by.pzmandroid.mac.databinding.ViewProgressBinding
 
 class ProgressView @JvmOverloads constructor(
@@ -25,13 +26,19 @@ class ProgressView @JvmOverloads constructor(
         return true
     }
 
-    fun updateProgressState(state: Boolean) {
+    fun updateProgressState(state: Boolean, text: String = String(), listener: View.OnClickListener? = null) {
         binding?.let {
             with(it) {
                 currentState = state
                 visibility = if (state) View.VISIBLE else View.GONE
                 vpProgressWheel.visibility = View.VISIBLE
                 vpProgressWheel.spin()
+                //if(text.isNotBlank())
+                vpText.isGone = text.isBlank()
+                vpButton.isGone = text.isBlank()
+                listener?.let { notNullListener ->
+                    vpButton.setOnClickListener(notNullListener)
+                }
             }
         }
 

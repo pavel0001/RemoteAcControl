@@ -196,12 +196,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backgroundTint="#E5F9FD"
-        app:elevation="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/menu_bottom" />
 
     <by.pzmandroid.mac.utils.view.ProgressView
         android:id="@+id/fr_progress"
+        android:elevation="3dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />

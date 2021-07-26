@@ -1,9 +1,7 @@
 package by.pzmandroid.mac.ui.root.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
@@ -85,6 +83,11 @@ class RootFragment : Fragment(R.layout.fragment_root) {
 
     private fun initVM(activity: FragmentActivity) {
         with(binding) {
+            viewModel.connectResult.observe(viewLifecycleOwner) {
+                frProgress.updateProgressState(true, "Ошибка соединения") {
+                    findNavController().navigate(RootFragmentDirections.toSettings())
+                }
+            }
             viewModel.mqttProgress.observe(viewLifecycleOwner) {
                 frProgress.updateProgressState(it)
             }
