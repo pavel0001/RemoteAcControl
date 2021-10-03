@@ -3,9 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
     app:startDestination="@id/rootFragment">
+
     <action
         android:id="@+id/toSettings"
         app:destination="@id/settingFragment" />
+
+    <action
+        android:id="@+id/toNotConnected"
+        app:destination="@id/notConnectedFragment" />
     <fragment
         android:id="@+id/rootFragment"
         android:name="by.pzmandroid.mac.ui.root.ui.RootFragment" />
@@ -13,5 +18,9 @@
     <fragment
         android:id="@+id/settingFragment"
         android:name="by.pzmandroid.mac.ui.settings.ui.SettingsFragment" />
+
+    <fragment
+        android:id="@+id/notConnectedFragment"
+        android:name="by.pzmandroid.mac.ui.notconnected.ui.NotConnectedFragment" />
 
 </navigation>

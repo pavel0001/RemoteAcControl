@@ -27,6 +27,33 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="MacText">
+        <item name="android:textColor">?attr/MacColorPrimaryText</item>
+        <item name="android:textSize">@dimen/font_size_normal</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="MacText.Primary">
+        <item name="android:textColor">?attr/MacColorPrimaryText</item>
+    </style>
+
+    <style name="MacText.Primary.Large">
+        <item name="android:textSize">@dimen/font_size_large</item>
+    </style>
+
+    <style name="MacText.Primary.Huge">
+        <item name="android:textSize">@dimen/font_size_huge</item>
+    </style>
+
+    <style name="MacText.Primary.XGiant">
+        <item name="android:textSize">@dimen/font_size_xgiant</item>
+    </style>
+
+    <style name="MacText.Inversed">
+        <item name="android:textColor">?attr/MacColorInversedText</item>
+    </style>
+
     <style name="MacInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="errorEnabled">false</item>
         <item name="boxStrokeColor">@drawable/text_input_selector</item>
@@ -35,8 +62,9 @@
         <item name="android:fontFamily">sans-serif</item>
     </style>
 
-    <style name="MacTextButton" parent="Widget.AppCompat.TextView">
-        <item name="background">@drawable/bg_stroke_button</item>
-        <item name="android:textSize">26sp</item>
+    <style name="MacTextButton" parent="MacText.Primary.Large">
+        <item name="android:background">@drawable/bg_stroke_button</item>
+        <item name="android:elevation">4dp</item>
+        <item name="android:gravity">center</item>
     </style>
 </resources>
