@@ -1,29 +1,41 @@
-package by.valtorn.remoteaccontrol.repository
+package by.pzmandroid.mac.repository
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import by.valtorn.remoteaccontrol.MQTTClient
-import by.valtorn.remoteaccontrol.model.AcState
-import by.valtorn.remoteaccontrol.model.SensorResponse
-import by.valtorn.remoteaccontrol.repository.CmdRepository.jsonToModel
-import by.valtorn.remoteaccontrol.utils.*
+import by.pzmandroid.mac.MQTTClient
+import by.pzmandroid.mac.MacApp
+import by.pzmandroid.mac.model.AcState
+import by.pzmandroid.mac.model.Credits
+import by.pzmandroid.mac.model.SensorResponse
+import by.pzmandroid.mac.repository.CmdRepository.jsonToModel
 import com.beust.klaxon.Klaxon
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.eclipse.paho.client.mqttv3.*
+import timber.log.Timber
 
 object MqttRepository {
 
+    private val mMqttTestProgress = MutableLiveData(false)
+    val mqttTestProgress: LiveData<Boolean> = mMqttTestProgress
+
+    private val mMqttTestResult = MutableLiveData<RequestResult>()
+    val mqttTestResult: LiveData<RequestResult> = mMqttTestResult
+
     private var mqttClient: MQTTClient? = null
+
+    lateinit var credits: Credits
 
     private val mMqttProgress = MutableLiveData(false)
     val mqttProgress: LiveData<Boolean> = mMqttProgress
 
     private val mPublishResult = MutableLiveData<RequestResult>()
     val publishResult: LiveData<RequestResult> = mPublishResult
+
+    private val mConnectResult = MutableLiveData<RequestResult>()
+    val connectResult: LiveData<RequestResult> = mConnectResult
 
     private val mReceivedMessage = MutableLiveData<SensorResponse>()
     val receivedMessage: LiveData<SensorResponse> = mReceivedMessage
@@ -34,65 +46,92 @@ object MqttRepository {
     private var isConnectRun: Boolean = false
 
     fun initializeAndConnect(context: Context) {
+        Timber.d("init mqtt")
+        refreshCredits()
         mMqttProgress.value = true
-        MQTTClient(context).let {
+        mqttClient?.close()
+        MQTTClient(context, credits.server, credits.clientId).let {
             mqttClient = it
         }
         connect()
         mMqttProgress.value = false
     }
 
-    fun connect() {
+    private fun refreshCredits() {
+        Timber.d("refreshCredits")
+        MacApp.instance.credentials?.let {
+            credits = it
+        }
+    }
+
+    private fun connect() {
         mqttClient?.let {
             if (it.isConnected()) return
             if (isConnectRun) return
             isConnectRun = true
+            Timber.d("connect with cred ${credits.server}")
             GlobalScope.launch(Dispatchers.IO) {
-                it.connect(cbConnect = connectCallback, cbClient = clientCallback)
+                it.connect(
+                    username = credits.login,
+                    password = credits.pwd,
+                    cbConnect = connectCallback,
+                    cbClient = clientCallback
+                )
                 isConnectRun = false
             }
         }
     }
 
-    private fun publishCmd(topic: String, cmd: String) {
+    fun disconnect() {
+        Timber.d("disconnect")
+        mqttClient?.let {
+            if (it.isConnected())
+                it.disconnect()
+        }
+    }
+
+    private fun publishCmd(cmd: String) {
         mMqttProgress.value = true
         mqttClient?.publish(
-            topic = topic,
+            topic = credits.MQTT_TOPIC_JSON_CMD,
             msg = cmd,
             qos = 1,
             cbPublish = publishCallback
         )
-        Log.i(DEBUG_TAG, "publishCmd topic $topic cmd = $cmd")
+        Timber.d("publishCmd topic ${credits.MQTT_TOPIC_JSON_CMD} cmd = $cmd")
     }
 
     fun sendJsonCmd(json: String) {
-        Log.i(DEBUG_TAG, "sending json $json")
-        publishCmd(MQTT_TOPIC_JSON_CMD, json)
+        Timber.d("sending json $json")
+        publishCmd(json)
     }
 
     private fun subscribe() {
-        mqttClient?.subscribe(topic = "$MQTT_TOPIC_ROOT+", qos = 1)
+        mqttClient?.subscribe(topic = "${credits.topic}+", qos = 1)
     }
 
     private val connectCallback = object : IMqttActionListener {
         override fun onSuccess(asyncActionToken: IMqttToken?) {
+            Timber.d("connectCallback onSuccess $asyncActionToken")
+            mConnectResult.value = RequestResult.SUCCESS
             subscribe()
         }
 
         override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
-            connect()
+            mConnectResult.value = RequestResult.FAIL
+            Timber.d("fail connect $asyncActionToken")
         }
     }
 
     private val clientCallback = object : MqttCallback {
         override fun messageArrived(topic: String?, message: MqttMessage?) {
             when (topic) {
-                MQTT_TOPIC_SENSOR -> {
+                credits.MQTT_TOPIC_SENSOR -> {
                     Klaxon().parse<SensorResponse>(message.toString())?.let { data ->
                         mReceivedMessage.value = data
                     }
                 }
-                MQTT_TOPIC_CALLBACK -> {
+                credits.MQTT_TOPIC_CALLBACK -> {
                     jsonToModel(message.toString())?.let {
                         mCurrentAcState.value = it
                     }
@@ -101,25 +140,24 @@ object MqttRepository {
         }
 
         override fun connectionLost(cause: Throwable?) {
-            connect()
-            Log.d(DEBUG_TAG, "Connection lost ${cause.toString()}")
+            Timber.d("Connection lost ${cause.toString()}")
         }
 
         override fun deliveryComplete(token: IMqttDeliveryToken?) {
-            Log.d(DEBUG_TAG, "Delivery completed")
+            Timber.d("Delivery completed")
             mMqttProgress.value = false
         }
     }
 
     private val publishCallback = object : IMqttActionListener {
         override fun onSuccess(asyncActionToken: IMqttToken?) {
-            Log.d(DEBUG_TAG, "Message published to topic")
+            Timber.d("Message published to topic")
             mPublishResult.value = RequestResult.SUCCESS
 
         }
 
         override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
-            Log.d(DEBUG_TAG, "Failed to publish message to topic")
+            Timber.d("Failed to publish message to topic")
             mPublishResult.value = RequestResult.FAIL
         }
     }

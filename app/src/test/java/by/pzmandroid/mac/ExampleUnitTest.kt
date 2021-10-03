@@ -1,4 +1,4 @@
-package by.valtorn.remoteaccontrol
+package by.pzmandroid.mac
 
 import org.junit.Test
 

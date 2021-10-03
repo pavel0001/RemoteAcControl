@@ -1,38 +1,30 @@
-package by.valtorn.remoteaccontrol.ui.root.ui
+package by.pzmandroid.mac.ui.root.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
-import by.valtorn.remoteaccontrol.R
-import by.valtorn.remoteaccontrol.databinding.FragmentRootBinding
-import by.valtorn.remoteaccontrol.model.AcFan
-import by.valtorn.remoteaccontrol.model.AcMode
-import by.valtorn.remoteaccontrol.ui.root.vm.RootVM
+import by.pzmandroid.mac.R
+import by.pzmandroid.mac.databinding.FragmentRootBinding
+import by.pzmandroid.mac.model.AcFan
+import by.pzmandroid.mac.model.AcMode
+import by.pzmandroid.mac.ui.root.vm.RootVM
 
-class RootFragment : Fragment() {
+class RootFragment : Fragment(R.layout.fragment_root) {
 
     private val viewModel by viewModels<RootVM>()
     private val binding by viewBinding(FragmentRootBinding::bind)
 
     private var powerButtonState = false
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_root, container, false)
-    }
-
     override fun onResume() {
         super.onResume()
-        viewModel.checkConnection()
+       // viewModel.checkConnection()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -62,7 +54,9 @@ class RootFragment : Fragment() {
                 viewModel.acTogglePower()
                 togglePoserBtn()
             }
-
+            frSettings.setOnClickListener {
+                findNavController().navigate(RootFragmentDirections.toSettings())
+            }
             frFanSlider.addOnChangeListener { _, value, _ ->
                 frFanSliderValue.text = getString(AcFan.values().first { fan -> fan.numberSlider == value.toInt() }.str)
                 viewModel.setFan(AcFan.values().first { it.numberSlider == value.toInt() })
@@ -89,6 +83,12 @@ class RootFragment : Fragment() {
 
     private fun initVM(activity: FragmentActivity) {
         with(binding) {
+            viewModel.connectResult.observe(viewLifecycleOwner) {
+                frProgress.updateProgressState(true) {
+                    findNavController().navigate(RootFragmentDirections.toSettings())
+                }
+            }
+
             viewModel.mqttProgress.observe(viewLifecycleOwner) {
                 frProgress.updateProgressState(it)
             }
@@ -132,12 +132,12 @@ class RootFragment : Fragment() {
 
     private fun togglePoserBtn() {
         with(binding) {
-            if (powerButtonState) {
+            powerButtonState = if (powerButtonState) {
                 frAcToggle.setImageResource(R.drawable.ic_power_off)
-                powerButtonState = false
+                false
             } else {
                 frAcToggle.setImageResource(R.drawable.ic_power_on)
-                powerButtonState = true
+                true
             }
         }
     }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Mqtt Controller</string>
+    <string name="app_name">MAC</string>
 
     <string name="root_temperature">%.0f</string>
     <string name="root_temperature_celsius">\u2103</string>
@@ -20,4 +20,19 @@
     <string name="fan_high">Max</string>
     <string name="fan_eco">Eco</string>
     <string name="fan_turbo">Turbo</string>
+
+    <!-- Preference Titles -->
+    <string name="preferences_mqtt">Mqtt broker</string>
+    <!-- Messages Preferences -->
+    <string name="preferences_mqtt_server">mqtt ip: port</string>
+    <string name="preferences_mqtt_login">Login</string>
+    <string name="preferences_mqtt_pwd">Password</string>
+    <string name="preferences_mqtt_client">Client ID</string>
+    <string name="preferences_mqtt_topic">Topic</string>
+
+    <string name="setting_test_connection">Test connection</string>
+    <string name="setting_apply">Apply</string>
+    <string name="setting_demo_preset">Test preset</string>
+
+    <string name="progress_setting">Settings</string>
 </resources>

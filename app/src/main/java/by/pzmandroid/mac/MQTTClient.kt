@@ -1,24 +1,21 @@
-package by.valtorn.remoteaccontrol
+package by.pzmandroid.mac
 
 import android.content.Context
 import android.util.Log
-import by.valtorn.remoteaccontrol.utils.MQTT_CLIENT_ID
-import by.valtorn.remoteaccontrol.utils.MQTT_PWD
-import by.valtorn.remoteaccontrol.utils.MQTT_SERVER_URI
-import by.valtorn.remoteaccontrol.utils.MQTT_USERNAME
+import by.pzmandroid.mac.utils.DEBUG_TAG
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
 
 class MQTTClient(
     context: Context?,
-    serverURI: String = MQTT_SERVER_URI,
-    clientID: String = MQTT_CLIENT_ID
+    serverURI: String,
+    clientID: String
 ) {
     private var mqttClient = MqttAndroidClient(context, serverURI, clientID)
 
     fun connect(
-        username: String = MQTT_USERNAME,
-        password: String = MQTT_PWD,
+        username: String,
+        password: String,
         cbConnect: IMqttActionListener = defaultCbConnect,
         cbClient: MqttCallback = defaultCbClient
     ) {
@@ -33,6 +30,8 @@ class MQTTClient(
             e.printStackTrace()
         }
     }
+
+    fun close() = mqttClient.close()
 
     fun isConnected(): Boolean {
         return mqttClient.isConnected
@@ -50,7 +49,7 @@ class MQTTClient(
         }
     }
 
-/*    fun unsubscribe(
+    fun unsubscribe(
         topic: String,
         cbUnsubscribe: IMqttActionListener = defaultCbUnsubscribe
     ) {
@@ -59,7 +58,7 @@ class MQTTClient(
         } catch (e: MqttException) {
             e.printStackTrace()
         }
-    }*/
+    }
 
     fun publish(
         topic: String,
@@ -79,13 +78,13 @@ class MQTTClient(
         }
     }
 
-/*    fun disconnect(cbDisconnect: IMqttActionListener = defaultCbDisconnect) {
+    fun disconnect(cbDisconnect: IMqttActionListener = defaultCbDisconnect) {
         try {
             mqttClient.disconnect(null, cbDisconnect)
         } catch (e: MqttException) {
             e.printStackTrace()
         }
-    }*/
+    }
 
     private val defaultCbConnect = object : IMqttActionListener {
         override fun onSuccess(asyncActionToken: IMqttToken?) {
@@ -119,15 +118,15 @@ class MQTTClient(
         }
     }
 
-    /*    private val defaultCbUnsubscribe = object : IMqttActionListener {
-            override fun onSuccess(asyncActionToken: IMqttToken?) {
-                Log.d(this.javaClass.name, "Unsubscribed to topic")
-            }
+    private val defaultCbUnsubscribe = object : IMqttActionListener {
+        override fun onSuccess(asyncActionToken: IMqttToken?) {
+            Log.d(this.javaClass.name, "Unsubscribed to topic")
+        }
 
-            override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
-                Log.d(this.javaClass.name, "Failed to unsubscribe topic")
-            }
-        }*/
+        override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
+            Log.d(this.javaClass.name, "Failed to unsubscribe topic")
+        }
+    }
     private val defaultCbPublish = object : IMqttActionListener {
         override fun onSuccess(asyncActionToken: IMqttToken?) {
             Log.d(this.javaClass.name, "Message published to topic")
@@ -137,13 +136,13 @@ class MQTTClient(
             Log.d(this.javaClass.name, "Failed to publish message to topic")
         }
     }
-/*    private val defaultCbDisconnect = object : IMqttActionListener {
+    private val defaultCbDisconnect = object : IMqttActionListener {
         override fun onSuccess(asyncActionToken: IMqttToken?) {
-            Log.d(this.javaClass.name, "Disconnected")
+            Log.i(DEBUG_TAG, "defaultCbDisconnect onSuccess")
         }
 
         override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
-            Log.d(this.javaClass.name, "Failed to disconnect")
+            Log.i(DEBUG_TAG, "defaultCbDisconnect onFailure")
         }
-    }*/
+    }
 }

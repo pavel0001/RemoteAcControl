@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.settings.ui.SettingsFragment">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/fs_server_input_layout"
+        style="@style/MacInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="@string/preferences_mqtt_server"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/fs_server_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/fs_user_input_layout"
+        style="@style/MacInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_marginBottom="14dp"
+        android:hint="@string/preferences_mqtt_login"
+        app:layout_constraintTop_toBottomOf="@id/fs_server_input_layout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/fs_login_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/fs_pwd_input_layout"
+        style="@style/MacInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_marginBottom="14dp"
+        android:hint="@string/preferences_mqtt_pwd"
+        app:layout_constraintTop_toBottomOf="@id/fs_user_input_layout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/fs_pwd_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/fs_client_input_layout"
+        style="@style/MacInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_marginBottom="14dp"
+        android:hint="@string/preferences_mqtt_client"
+        app:layout_constraintTop_toBottomOf="@id/fs_pwd_input_layout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/fs_client_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/fs_topic_input_layout"
+        style="@style/MacInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_marginBottom="14dp"
+        android:hint="@string/preferences_mqtt_topic"
+        app:layout_constraintTop_toBottomOf="@id/fs_client_input_layout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/fs_topic_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/fs_preset_demo"
+        style="@style/MacTextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="26dp"
+        android:background="@drawable/bg_stroke_button"
+        android:gravity="center"
+        android:text="@string/setting_demo_preset"
+        app:layout_constraintTop_toBottomOf="@id/fs_topic_input_layout" />
+
+    <TextView
+        android:id="@+id/fs_apply"
+        style="@style/MacTextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="26dp"
+        android:background="@drawable/bg_stroke_button"
+        android:gravity="center"
+        android:text="@string/setting_apply"
+        app:layout_constraintTop_toBottomOf="@id/fs_preset_demo" />
+
+    <by.pzmandroid.mac.utils.view.ProgressView
+        android:id="@+id/fs_progress"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

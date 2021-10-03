@@ -1,8 +1,8 @@
-package by.valtorn.remoteaccontrol.repository
+package by.pzmandroid.mac.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import by.valtorn.remoteaccontrol.model.*
+import by.pzmandroid.mac.model.*
 import com.beust.klaxon.Klaxon
 
 object CmdRepository {
