@@ -1,23 +1,22 @@
 package by.pzmandroid.mac.repository
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import by.pzmandroid.mac.MQTTClient
+import by.pzmandroid.mac.MacApp
 import by.pzmandroid.mac.model.AcState
+import by.pzmandroid.mac.model.Credits
 import by.pzmandroid.mac.model.SensorResponse
 import by.pzmandroid.mac.repository.CmdRepository.jsonToModel
-import by.pzmandroid.mac.utils.DEBUG_TAG
 import com.beust.klaxon.Klaxon
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.eclipse.paho.client.mqttv3.*
+import timber.log.Timber
 
 object MqttRepository {
-
-    private var mqttTestClient: MQTTClient? = null
 
     private val mMqttTestProgress = MutableLiveData(false)
     val mqttTestProgress: LiveData<Boolean> = mMqttTestProgress
@@ -27,7 +26,7 @@ object MqttRepository {
 
     private var mqttClient: MQTTClient? = null
 
-    lateinit var credits: CredRepository.Credits
+    lateinit var credits: Credits
 
     private val mMqttProgress = MutableLiveData(false)
     val mqttProgress: LiveData<Boolean> = mMqttProgress
@@ -47,8 +46,10 @@ object MqttRepository {
     private var isConnectRun: Boolean = false
 
     fun initializeAndConnect(context: Context) {
-        credits = CredRepository.getCredits()
+        Timber.d("init mqtt")
+        refreshCredits()
         mMqttProgress.value = true
+        mqttClient?.close()
         MQTTClient(context, credits.server, credits.clientId).let {
             mqttClient = it
         }
@@ -56,43 +57,19 @@ object MqttRepository {
         mMqttProgress.value = false
     }
 
-    fun testConnection(
-        context: Context,
-        server: String,
-        clientId: String,
-        user: String,
-        pwd: String
-    ) {
-        credits = CredRepository.getCredits()
-        mMqttTestProgress.value = true
-        MQTTClient(context, server, clientId).let {
-            mqttTestClient = it
-        }
-        testConnect(user, pwd)
-        mMqttTestProgress.value = false
-    }
-
-    private fun testConnect(user: String, pwd: String) {
-        mqttTestClient?.let {
-            if (it.isConnected()) return
-            if (isConnectRun) return
-            isConnectRun = true
-            GlobalScope.launch(Dispatchers.IO) {
-                it.connect(
-                    username = user,
-                    password = pwd,
-                    cbConnect = testConnectCallback
-                )
-                isConnectRun = false
-            }
+    private fun refreshCredits() {
+        Timber.d("refreshCredits")
+        MacApp.instance.credentials?.let {
+            credits = it
         }
     }
 
-    fun connect() {
+    private fun connect() {
         mqttClient?.let {
             if (it.isConnected()) return
             if (isConnectRun) return
             isConnectRun = true
+            Timber.d("connect with cred ${credits.server}")
             GlobalScope.launch(Dispatchers.IO) {
                 it.connect(
                     username = credits.login,
@@ -105,6 +82,14 @@ object MqttRepository {
         }
     }
 
+    fun disconnect() {
+        Timber.d("disconnect")
+        mqttClient?.let {
+            if (it.isConnected())
+                it.disconnect()
+        }
+    }
+
     private fun publishCmd(cmd: String) {
         mMqttProgress.value = true
         mqttClient?.publish(
@@ -113,11 +98,11 @@ object MqttRepository {
             qos = 1,
             cbPublish = publishCallback
         )
-        Log.i(DEBUG_TAG, "publishCmd topic ${credits.MQTT_TOPIC_JSON_CMD} cmd = $cmd")
+        Timber.d("publishCmd topic ${credits.MQTT_TOPIC_JSON_CMD} cmd = $cmd")
     }
 
     fun sendJsonCmd(json: String) {
-        Log.i(DEBUG_TAG, "sending json $json")
+        Timber.d("sending json $json")
         publishCmd(json)
     }
 
@@ -127,28 +112,14 @@ object MqttRepository {
 
     private val connectCallback = object : IMqttActionListener {
         override fun onSuccess(asyncActionToken: IMqttToken?) {
+            Timber.d("connectCallback onSuccess $asyncActionToken")
             mConnectResult.value = RequestResult.SUCCESS
             subscribe()
         }
 
         override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
             mConnectResult.value = RequestResult.FAIL
-            Log.i(DEBUG_TAG, "fail connect")
-        }
-    }
-
-    private val testConnectCallback = object : IMqttActionListener {
-        override fun onSuccess(asyncActionToken: IMqttToken?) {
-            mMqttTestResult.value = RequestResult.SUCCESS
-
-            mqttTestClient?.let {
-                if (it.isConnected())
-                    it.disconnect()
-            }
-        }
-
-        override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
-            mMqttTestResult.value = RequestResult.FAIL
+            Timber.d("fail connect $asyncActionToken")
         }
     }
 
@@ -169,25 +140,24 @@ object MqttRepository {
         }
 
         override fun connectionLost(cause: Throwable?) {
-            connect()
-            Log.d(DEBUG_TAG, "Connection lost ${cause.toString()}")
+            Timber.d("Connection lost ${cause.toString()}")
         }
 
         override fun deliveryComplete(token: IMqttDeliveryToken?) {
-            Log.d(DEBUG_TAG, "Delivery completed")
+            Timber.d("Delivery completed")
             mMqttProgress.value = false
         }
     }
 
     private val publishCallback = object : IMqttActionListener {
         override fun onSuccess(asyncActionToken: IMqttToken?) {
-            Log.d(DEBUG_TAG, "Message published to topic")
+            Timber.d("Message published to topic")
             mPublishResult.value = RequestResult.SUCCESS
 
         }
 
         override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
-            Log.d(DEBUG_TAG, "Failed to publish message to topic")
+            Timber.d("Failed to publish message to topic")
             mPublishResult.value = RequestResult.FAIL
         }
     }

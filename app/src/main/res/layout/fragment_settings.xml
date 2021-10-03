@@ -32,7 +32,7 @@
         app:layout_constraintTop_toBottomOf="@id/fs_server_input_layout">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/fs_user_text"
+            android:id="@+id/fs_login_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text" />
@@ -90,17 +90,6 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/fs_test_connection"
-        style="@style/MacTextButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="26dp"
-        android:background="@drawable/bg_stroke_button"
-        android:gravity="center"
-        android:text="@string/setting_test_connection"
-        app:layout_constraintTop_toBottomOf="@id/fs_topic_input_layout" />
-
-    <TextView
         android:id="@+id/fs_preset_demo"
         style="@style/MacTextButton"
         android:layout_width="match_parent"
@@ -109,7 +98,7 @@
         android:background="@drawable/bg_stroke_button"
         android:gravity="center"
         android:text="@string/setting_demo_preset"
-        app:layout_constraintTop_toBottomOf="@id/fs_test_connection" />
+        app:layout_constraintTop_toBottomOf="@id/fs_topic_input_layout" />
 
     <TextView
         android:id="@+id/fs_apply"

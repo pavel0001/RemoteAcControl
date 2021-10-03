@@ -22,20 +22,17 @@ class ProgressView @JvmOverloads constructor(
         isClickable = true
     }
 
-    override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
+/*    override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
         return true
-    }
+    }*/
 
-    fun updateProgressState(state: Boolean, text: String = String(), listener: View.OnClickListener? = null) {
+    fun updateProgressState(state: Boolean, listener: View.OnClickListener? = null) {
         binding?.let {
             with(it) {
                 currentState = state
                 visibility = if (state) View.VISIBLE else View.GONE
                 vpProgressWheel.visibility = View.VISIBLE
                 vpProgressWheel.spin()
-                //if(text.isNotBlank())
-                vpText.isGone = text.isBlank()
-                vpButton.isGone = text.isBlank()
                 listener?.let { notNullListener ->
                     vpButton.setOnClickListener(notNullListener)
                 }

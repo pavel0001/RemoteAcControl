@@ -1,15 +1,14 @@
 package by.pzmandroid.mac.ui.settings.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.preference.PreferenceManager
 import by.kirich1409.viewbindingdelegate.viewBinding
+import by.pzmandroid.mac.MacApp
 import by.pzmandroid.mac.R
 import by.pzmandroid.mac.databinding.FragmentSettingsBinding
 import by.pzmandroid.mac.repository.MqttRepository
@@ -25,7 +24,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.let {
-            loadSettings(it)
+            loadSettings()
             initUI(it)
             initVM(it)
         }
@@ -33,19 +32,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private fun initUI(activity: FragmentActivity) {
         with(binding) {
-            fsTestConnection.setOnClickListener {
-                if (fsServerText.text.isNullOrEmpty() || fsTopicText.text.isNullOrEmpty()) {
-                    Toast.makeText(activity, "Server empty", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-                viewModel.testConnection(
-                    activity,
-                    fsServerText.text.toString(),
-                    fsClientText.text.toString(),
-                    fsUserText.text.toString(),
-                    fsPwdText.text.toString()
-                )
-            }
             fsPresetDemo.setOnClickListener {
                 loadDemoPreset()
             }
@@ -54,40 +40,40 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     Toast.makeText(activity, "Server empty", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
-                saveSettings(activity)
+                saveSettings()
                 findNavController().popBackStack()
             }
         }
     }
 
-    private fun loadSettings(activity: FragmentActivity) {
+    private fun loadSettings() {
         with(binding) {
-            PreferenceManager.getDefaultSharedPreferences(activity).let {
-                fsServerText.setText(it.getString(PREFERENCE_KEY_SERVER, String()))
-                fsUserText.setText(it.getString(PREFERENCE_KEY_USER, String()))
-                fsPwdText.setText(it.getString(PREFERENCE_KEY_PWD, String()))
-                fsClientText.setText(it.getString(PREFERENCE_KEY_CLIENT, String()))
-                fsTopicText.setText(it.getString(PREFERENCE_KEY_TOPIC, String()))
+            MacApp.instance.credentials?.let {
+                fsServerText.setText(it.server)
+                fsLoginText.setText(it.login)
+                fsPwdText.setText(it.pwd)
+                fsClientText.setText(it.clientId)
+                fsTopicText.setText(it.topic)
             }
         }
     }
 
-    private fun saveSettings(activity: FragmentActivity) {
+    private fun saveSettings() {
         with(binding) {
-            PreferenceManager.getDefaultSharedPreferences(activity).edit().let {
-                it.putString(PREFERENCE_KEY_SERVER, fsServerText.text.toString())
-                it.putString(PREFERENCE_KEY_USER, fsUserText.text.toString())
-                it.putString(PREFERENCE_KEY_PWD, fsPwdText.text.toString())
-                it.putString(PREFERENCE_KEY_CLIENT, fsClientText.text.toString())
-                it.putString(PREFERENCE_KEY_TOPIC, fsTopicText.text.toString())
-            }
+            MacApp.instance.saveCredits(
+                server = fsServerText.text.toString(),
+                login = fsLoginText.text.toString(),
+                pwd = fsPwdText.text.toString(),
+                clientId = fsClientText.text.toString(),
+                topic = fsTopicText.text.toString()
+            )
         }
     }
 
     private fun loadDemoPreset() {
         with(binding) {
             fsServerText.setText(MQTT_SERVER_URI)
-            fsUserText.setText(MQTT_USERNAME)
+            fsLoginText.setText(MQTT_LOGIN)
             fsPwdText.setText(MQTT_PWD)
             fsClientText.setText(MQTT_CLIENT_ID)
             fsTopicText.setText(MQTT_TOPIC_ROOT)
@@ -96,8 +82,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private fun initVM(activity: FragmentActivity) {
         with(binding) {
+            viewModel.disconnectMqtt()
             viewModel.progress.observe(viewLifecycleOwner) {
-                Log.i(DEBUG_TAG, "progress test $it")
                 fsProgress.updateProgressState(it)
             }
             viewModel.result.observe(viewLifecycleOwner) {

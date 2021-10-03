@@ -32,6 +32,7 @@ class RootVM : ViewModel() {
 
     fun initMqtt(context: Context) {
         MqttRepository.initializeAndConnect(context)
+        syncWithCurrent()
     }
 
     fun acTogglePower() {
@@ -78,10 +79,5 @@ class RootVM : ViewModel() {
             }
             mSyncProgress.value = false
         }
-    }
-
-    fun checkConnection() {
-        MqttRepository.connect()
-        syncWithCurrent()
     }
 }

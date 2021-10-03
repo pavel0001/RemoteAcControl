@@ -24,7 +24,7 @@ class RootFragment : Fragment(R.layout.fragment_root) {
 
     override fun onResume() {
         super.onResume()
-        viewModel.checkConnection()
+       // viewModel.checkConnection()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -84,10 +84,11 @@ class RootFragment : Fragment(R.layout.fragment_root) {
     private fun initVM(activity: FragmentActivity) {
         with(binding) {
             viewModel.connectResult.observe(viewLifecycleOwner) {
-                frProgress.updateProgressState(true, "Ошибка соединения") {
+                frProgress.updateProgressState(true) {
                     findNavController().navigate(RootFragmentDirections.toSettings())
                 }
             }
+
             viewModel.mqttProgress.observe(viewLifecycleOwner) {
                 frProgress.updateProgressState(it)
             }

@@ -33,4 +33,6 @@
     <string name="setting_apply">Применить</string>
     <string name="setting_demo_preset">Тестовые настройки</string>
 
+    <string name="progress_setting">К настройкам</string>
+
 </resources>

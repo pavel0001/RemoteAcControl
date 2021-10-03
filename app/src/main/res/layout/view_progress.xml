@@ -20,18 +20,6 @@
         wheel:matProg_progressIndeterminate="true" />
 
     <TextView
-        android:id="@+id/vp_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@id/vp_progress_wheel"
-        app:layout_constraintStart_toStartOf="@id/vp_progress_wheel"
-        app:layout_constraintTop_toBottomOf="@id/vp_progress_wheel"
-        tools:text="Ошибка подключения к серверу"
-        tools:visibility="visible" />
-
-    <TextView
         android:id="@+id/vp_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,11 +27,10 @@
         android:background="@drawable/bg_stroke_button"
         android:paddingHorizontal="16dp"
         android:paddingVertical="8dp"
-        android:visibility="gone"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="@id/vp_progress_wheel"
         app:layout_constraintStart_toStartOf="@id/vp_progress_wheel"
-        app:layout_constraintTop_toBottomOf="@id/vp_text"
-        tools:text="К настройкам"
-        tools:visibility="visible" />
+        app:layout_constraintTop_toBottomOf="@id/vp_progress_wheel"
+        android:text="@string/progress_setting" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
