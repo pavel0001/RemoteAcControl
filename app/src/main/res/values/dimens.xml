@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- mini-->
+    <dimen name="font_size_mini">8sp</dimen>
+    <!--little-->
+    <dimen name="font_size_little">10sp</dimen>
+    <!--pre-small-->
+    <dimen name="font_size_pre_small">11sp</dimen>
+    <!--small-->
+    <dimen name="font_size_small">12sp</dimen>
+    <!--pre-normal-->
+    <dimen name="font_size_pre_normal">13sp</dimen>
+    <!--normal-->
+    <dimen name="font_size_normal">14sp</dimen>
+    <!--pre-big-->
+    <dimen name="font_size_pre_big">15sp</dimen>
+    <!--big-->
+    <dimen name="font_size_big">16sp</dimen>
+    <!--pre-large-->
+    <dimen name="font_size_pre_large">17sp</dimen>
+    <!--large-->
+    <dimen name="font_size_large">18sp</dimen>
+    <!--extra-large-->
+    <dimen name="font_size_extra_large">20sp</dimen>
+    <!--pre-huge-->
+    <dimen name="font_size_pre_huge">22sp</dimen>
+    <!--huge-->
+    <dimen name="font_size_huge">24sp</dimen>
+    <!--prexhuge-->
+    <dimen name="font_size_pre_xhuge">28sp</dimen>
+    <!--xhuge-->
+    <dimen name="font_size_xhuge">28sp</dimen>
+    <!--xxhuge-->
+    <dimen name="font_size_xxhuge">30sp</dimen>
+    <!--pre-giant-->
+    <dimen name="font_size_pre_giant">32sp</dimen>
+    <!--xpre-giant-->
+    <dimen name="font_size_xpre_giant">34sp</dimen>
+    <!--giant-->
+    <dimen name="font_size_giant">36sp</dimen>
+    <!--xgiant-->
+    <dimen name="font_size_xgiant">40sp</dimen>
+    <!--extra_giant-->
+    <dimen name="font_size_extra_giant">72sp</dimen>
+
+    <dimen name="card_text_size">25sp</dimen>
+    <dimen name="auth_button_height">67dp</dimen>
+</resources>
