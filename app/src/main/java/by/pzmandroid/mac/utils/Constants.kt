@@ -2,7 +2,7 @@ package by.pzmandroid.mac.utils
 
 const val DEBUG_TAG = "MyTagForMQTT"
 const val PREFERENCES_MQTT = "mqttpreferences"
-const val MQTT_SERVER_URI = "tcp://test.mosquitto.org:1883"
+const val MQTT_SERVER_URI = "tcp://140.238.171.78:1883"
 const val MQTT_CLIENT_ID = ""
 const val MQTT_LOGIN = ""
 const val MQTT_PWD = ""
