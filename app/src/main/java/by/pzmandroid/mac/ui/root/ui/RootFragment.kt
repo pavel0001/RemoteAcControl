@@ -13,7 +13,9 @@ import by.pzmandroid.mac.R
 import by.pzmandroid.mac.databinding.FragmentRootBinding
 import by.pzmandroid.mac.model.AcFan
 import by.pzmandroid.mac.model.AcMode
+import by.pzmandroid.mac.repository.MqttRepository
 import by.pzmandroid.mac.ui.root.vm.RootVM
+import by.pzmandroid.mac.utils.extensions.safelyNavigate
 
 class RootFragment : Fragment(R.layout.fragment_root) {
 
@@ -24,7 +26,7 @@ class RootFragment : Fragment(R.layout.fragment_root) {
 
     override fun onResume() {
         super.onResume()
-       // viewModel.checkConnection()
+        // viewModel.checkConnection()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -83,9 +85,11 @@ class RootFragment : Fragment(R.layout.fragment_root) {
 
     private fun initVM(activity: FragmentActivity) {
         with(binding) {
-            viewModel.connectResult.observe(viewLifecycleOwner) {
-                frProgress.updateProgressState(true) {
-                    findNavController().navigate(RootFragmentDirections.toSettings())
+            viewModel.connectResult.observe(viewLifecycleOwner) { connectResult ->
+                connectResult.getIfPending()?.let {
+                    if (it == MqttRepository.ConnectionState.DISCONNECTED) {
+                        findNavController().safelyNavigate(RootFragmentDirections.toNotConnected())
+                    }
                 }
             }
 

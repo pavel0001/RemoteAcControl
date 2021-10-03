@@ -11,9 +11,9 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import by.pzmandroid.mac.MacApp
 import by.pzmandroid.mac.R
 import by.pzmandroid.mac.databinding.FragmentSettingsBinding
-import by.pzmandroid.mac.repository.MqttRepository
 import by.pzmandroid.mac.ui.settings.vm.SettingVM
 import by.pzmandroid.mac.utils.*
+import by.pzmandroid.mac.utils.extensions.safelyNavigate
 
 
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
@@ -41,7 +41,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     return@setOnClickListener
                 }
                 saveSettings()
-                findNavController().popBackStack()
+                findNavController().safelyNavigate(SettingsFragmentDirections.toNotConnected())
             }
         }
     }
@@ -83,18 +83,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private fun initVM(activity: FragmentActivity) {
         with(binding) {
             viewModel.disconnectMqtt()
-            viewModel.progress.observe(viewLifecycleOwner) {
-                fsProgress.updateProgressState(it)
-            }
-            viewModel.result.observe(viewLifecycleOwner) {
-                Toast.makeText(
-                    activity, if (it == MqttRepository.RequestResult.SUCCESS) {
-                        "Соединение установлено"
-                    } else {
-                        "Ошибка"
-                    }, Toast.LENGTH_LONG
-                ).show()
-            }
         }
     }
 }

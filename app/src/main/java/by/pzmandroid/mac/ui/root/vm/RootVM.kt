@@ -20,7 +20,7 @@ class RootVM : ViewModel() {
     val receivedMessage = MqttRepository.receivedMessage
     val publishResult = MqttRepository.publishResult
 
-    val connectResult = MqttRepository.connectResult
+    val connectResult = MqttRepository.connectionState
 
     private val currentAcStateFromEsp = MqttRepository.currentAcState
 

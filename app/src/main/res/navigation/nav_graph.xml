@@ -11,6 +11,7 @@
     <action
         android:id="@+id/toNotConnected"
         app:destination="@id/notConnectedFragment" />
+
     <fragment
         android:id="@+id/rootFragment"
         android:name="by.pzmandroid.mac.ui.root.ui.RootFragment" />
@@ -21,6 +22,12 @@
 
     <fragment
         android:id="@+id/notConnectedFragment"
-        android:name="by.pzmandroid.mac.ui.notconnected.ui.NotConnectedFragment" />
+        android:name="by.pzmandroid.mac.ui.notconnected.ui.NotConnectedFragment">
+
+        <action
+            android:id="@+id/toRoot"
+            app:destination="@+id/rootFragment" />
+
+    </fragment>
 
 </navigation>

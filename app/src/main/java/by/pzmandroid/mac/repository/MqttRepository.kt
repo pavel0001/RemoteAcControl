@@ -9,6 +9,7 @@ import by.pzmandroid.mac.model.AcState
 import by.pzmandroid.mac.model.Credits
 import by.pzmandroid.mac.model.SensorResponse
 import by.pzmandroid.mac.repository.CmdRepository.jsonToModel
+import by.pzmandroid.mac.utils.Event
 import com.beust.klaxon.Klaxon
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -18,15 +19,12 @@ import timber.log.Timber
 
 object MqttRepository {
 
-    private val mMqttTestProgress = MutableLiveData(false)
-    val mqttTestProgress: LiveData<Boolean> = mMqttTestProgress
-
-    private val mMqttTestResult = MutableLiveData<RequestResult>()
-    val mqttTestResult: LiveData<RequestResult> = mMqttTestResult
-
     private var mqttClient: MQTTClient? = null
 
     lateinit var credits: Credits
+
+    private val mConnectionState = MutableLiveData<Event<ConnectionState>>()
+    val connectionState: LiveData<Event<ConnectionState>> = mConnectionState
 
     private val mMqttProgress = MutableLiveData(false)
     val mqttProgress: LiveData<Boolean> = mMqttProgress
@@ -113,12 +111,12 @@ object MqttRepository {
     private val connectCallback = object : IMqttActionListener {
         override fun onSuccess(asyncActionToken: IMqttToken?) {
             Timber.d("connectCallback onSuccess $asyncActionToken")
-            mConnectResult.value = RequestResult.SUCCESS
+            mConnectionState.value = Event(ConnectionState.CONNECTED)
             subscribe()
         }
 
         override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
-            mConnectResult.value = RequestResult.FAIL
+            mConnectionState.value = Event(ConnectionState.DISCONNECTED)
             Timber.d("fail connect $asyncActionToken")
         }
     }
@@ -140,6 +138,7 @@ object MqttRepository {
         }
 
         override fun connectionLost(cause: Throwable?) {
+            mConnectionState.value = Event(ConnectionState.DISCONNECTED)
             Timber.d("Connection lost ${cause.toString()}")
         }
 
@@ -165,5 +164,10 @@ object MqttRepository {
     enum class RequestResult(val str: String) {
         SUCCESS("Доставлено"),
         FAIL("Ошибка")
+    }
+
+    enum class ConnectionState {
+        CONNECTED,
+        DISCONNECTED
     }
 }
