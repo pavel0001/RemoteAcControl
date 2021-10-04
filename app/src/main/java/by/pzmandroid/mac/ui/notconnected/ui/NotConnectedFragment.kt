@@ -2,6 +2,7 @@ package by.pzmandroid.mac.ui.notconnected.ui
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
@@ -21,27 +22,44 @@ class NotConnectedFragment : Fragment(R.layout.fragment_not_connected) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.let {
-            initUI()
+            initUI(it)
             initVM(it)
         }
     }
 
-    private fun initUI() {
+    private fun initUI(activity: FragmentActivity) {
         with(binding) {
             fncSettings.setOnClickListener {
                 findNavController().safelyNavigate(NotConnectedFragmentDirections.toSettings())
             }
             fncRefresh.setOnClickListener {
-                viewModel.reconnect()
+                viewModel.reconnect(activity)
             }
         }
     }
 
     private fun initVM(activity: FragmentActivity) {
-        viewModel.connectionState.observe(viewLifecycleOwner) { connectionState ->
-            connectionState.getIfPending()?.let {
-                if (it == MqttRepository.ConnectionState.CONNECTED) {
-                    findNavController().safelyNavigate(NotConnectedFragmentDirections.toRoot())
+        with(binding) {
+            viewModel.connectionState.observe(viewLifecycleOwner) { connectionState ->
+                connectionState.getIfPending()?.let {
+                    if (it == MqttRepository.ConnectionState.CONNECTED) {
+                        findNavController().safelyNavigate(NotConnectedFragmentDirections.toRoot())
+                    }
+                }
+            }
+            viewModel.progress.observe(viewLifecycleOwner) {
+                fncRefresh.text = getString(
+                    if (it) {
+                        R.string.notconnected_progress
+                    } else {
+                        R.string.notconnected_refresh
+                    }
+                )
+                fncRefresh.isEnabled = !it
+            }
+            viewModel.connectResult.observe(viewLifecycleOwner) { connectResult ->
+                connectResult.getIfPending()?.let {
+                    Toast.makeText(activity, it.str, Toast.LENGTH_SHORT).show()
                 }
             }
         }

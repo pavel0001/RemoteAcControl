@@ -32,7 +32,7 @@ class RootFragment : Fragment(R.layout.fragment_root) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.let {
-            viewModel.initMqtt(it)
+            //viewModel.initMqtt(it)
             initUI()
             initVM(it)
         }
@@ -57,7 +57,7 @@ class RootFragment : Fragment(R.layout.fragment_root) {
                 togglePoserBtn()
             }
             frSettings.setOnClickListener {
-                findNavController().navigate(RootFragmentDirections.toSettings())
+                viewModel.disconnect()
             }
             frFanSlider.addOnChangeListener { _, value, _ ->
                 frFanSliderValue.text = getString(AcFan.values().first { fan -> fan.numberSlider == value.toInt() }.str)
@@ -87,7 +87,7 @@ class RootFragment : Fragment(R.layout.fragment_root) {
         with(binding) {
             viewModel.connectResult.observe(viewLifecycleOwner) { connectResult ->
                 connectResult.getIfPending()?.let {
-                    if (it == MqttRepository.ConnectionState.DISCONNECTED) {
+                    if (it != MqttRepository.ConnectionState.CONNECTED) {
                         findNavController().safelyNavigate(RootFragmentDirections.toNotConnected())
                     }
                 }

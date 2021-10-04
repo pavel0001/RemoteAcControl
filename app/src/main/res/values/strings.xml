@@ -36,5 +36,6 @@
     <string name="notconnected_title">Соединение не установлено</string>
     <string name="notconnected_refresh">Повторить подключение</string>
     <string name="notconnected_setting">К настройкам</string>
+    <string name="notconnected_progress">Подключаемся…</string>
 
 </resources>

@@ -80,4 +80,8 @@ class RootVM : ViewModel() {
             mSyncProgress.value = false
         }
     }
+
+    fun disconnect() {
+        MqttRepository.disconnect()
+    }
 }

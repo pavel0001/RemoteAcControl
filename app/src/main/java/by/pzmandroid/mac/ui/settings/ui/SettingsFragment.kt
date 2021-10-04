@@ -26,7 +26,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         activity?.let {
             loadSettings()
             initUI(it)
-            initVM(it)
+            initVM()
         }
     }
 
@@ -80,7 +80,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         }
     }
 
-    private fun initVM(activity: FragmentActivity) {
+    private fun initVM() {
         with(binding) {
             viewModel.disconnectMqtt()
         }

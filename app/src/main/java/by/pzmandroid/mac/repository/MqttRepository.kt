@@ -23,7 +23,7 @@ object MqttRepository {
 
     lateinit var credits: Credits
 
-    private val mConnectionState = MutableLiveData<Event<ConnectionState>>()
+    private val mConnectionState = MutableLiveData(Event(ConnectionState.DISCONNECTED))
     val connectionState: LiveData<Event<ConnectionState>> = mConnectionState
 
     private val mMqttProgress = MutableLiveData(false)
@@ -32,8 +32,8 @@ object MqttRepository {
     private val mPublishResult = MutableLiveData<RequestResult>()
     val publishResult: LiveData<RequestResult> = mPublishResult
 
-    private val mConnectResult = MutableLiveData<RequestResult>()
-    val connectResult: LiveData<RequestResult> = mConnectResult
+    private val mConnectResult = MutableLiveData<Event<RequestResult>>()
+    val connectResult: LiveData<Event<RequestResult>> = mConnectResult
 
     private val mReceivedMessage = MutableLiveData<SensorResponse>()
     val receivedMessage: LiveData<SensorResponse> = mReceivedMessage
@@ -111,11 +111,15 @@ object MqttRepository {
     private val connectCallback = object : IMqttActionListener {
         override fun onSuccess(asyncActionToken: IMqttToken?) {
             Timber.d("connectCallback onSuccess $asyncActionToken")
+            mConnectResult.value = Event(RequestResult.SUCCESS)
             mConnectionState.value = Event(ConnectionState.CONNECTED)
             subscribe()
         }
 
         override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
+            mConnectResult.value = Event(
+                RequestResult.FAIL.also { it.str = exception.toString() }
+            )
             mConnectionState.value = Event(ConnectionState.DISCONNECTED)
             Timber.d("fail connect $asyncActionToken")
         }
@@ -161,7 +165,7 @@ object MqttRepository {
         }
     }
 
-    enum class RequestResult(val str: String) {
+    enum class RequestResult(var str: String) {
         SUCCESS("Доставлено"),
         FAIL("Ошибка")
     }
