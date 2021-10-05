@@ -24,11 +24,6 @@ class RootFragment : Fragment(R.layout.fragment_root) {
 
     private var powerButtonState = false
 
-    override fun onResume() {
-        super.onResume()
-        // viewModel.checkConnection()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.let {

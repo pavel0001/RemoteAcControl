@@ -3,6 +3,7 @@ package by.pzmandroid.mac.ui.notconnected.ui
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
@@ -13,6 +14,7 @@ import by.pzmandroid.mac.databinding.FragmentNotConnectedBinding
 import by.pzmandroid.mac.repository.MqttRepository
 import by.pzmandroid.mac.ui.notconnected.vm.NotConnectedVM
 import by.pzmandroid.mac.utils.extensions.safelyNavigate
+import timber.log.Timber
 
 class NotConnectedFragment : Fragment(R.layout.fragment_not_connected) {
 
@@ -41,6 +43,7 @@ class NotConnectedFragment : Fragment(R.layout.fragment_not_connected) {
     private fun initVM(activity: FragmentActivity) {
         with(binding) {
             viewModel.connectionState.observe(viewLifecycleOwner) { connectionState ->
+                Timber.d("connectionState $connectionState")
                 connectionState.getIfPending()?.let {
                     if (it == MqttRepository.ConnectionState.CONNECTED) {
                         findNavController().safelyNavigate(NotConnectedFragmentDirections.toRoot())
@@ -48,18 +51,19 @@ class NotConnectedFragment : Fragment(R.layout.fragment_not_connected) {
                 }
             }
             viewModel.progress.observe(viewLifecycleOwner) {
-                fncRefresh.text = getString(
-                    if (it) {
-                        R.string.notconnected_progress
-                    } else {
-                        R.string.notconnected_refresh
-                    }
-                )
+                fncProgress.isVisible = it
+                fncProgress.spin()
                 fncRefresh.isEnabled = !it
+                fncRefresh.text = if (it) {
+                    getString(R.string.notconnected_progress)
+                } else {
+                    getString(R.string.notconnected_refresh)
+                }
             }
             viewModel.connectResult.observe(viewLifecycleOwner) { connectResult ->
                 connectResult.getIfPending()?.let {
-                    Toast.makeText(activity, it.str, Toast.LENGTH_SHORT).show()
+                    if (it == MqttRepository.RequestResult.FAIL)
+                        Toast.makeText(activity, it.str, Toast.LENGTH_SHORT).show()
                 }
             }
         }

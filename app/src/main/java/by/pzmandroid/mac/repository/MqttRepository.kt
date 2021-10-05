@@ -52,7 +52,6 @@ object MqttRepository {
             mqttClient = it
         }
         connect()
-        mMqttProgress.value = false
     }
 
     private fun refreshCredits() {
@@ -64,10 +63,11 @@ object MqttRepository {
 
     private fun connect() {
         mqttClient?.let {
-            if (it.isConnected()) return
-            if (isConnectRun) return
+            if (it.isConnected() || isConnectRun) {
+                mMqttProgress.value = false
+                return
+            }
             isConnectRun = true
-            Timber.d("connect with cred ${credits.server}")
             GlobalScope.launch(Dispatchers.IO) {
                 it.connect(
                     username = credits.login,
@@ -75,13 +75,11 @@ object MqttRepository {
                     cbConnect = connectCallback,
                     cbClient = clientCallback
                 )
-                isConnectRun = false
             }
         }
     }
 
     fun disconnect() {
-        Timber.d("disconnect")
         mqttClient?.let {
             if (it.isConnected())
                 it.disconnect()
@@ -111,12 +109,16 @@ object MqttRepository {
     private val connectCallback = object : IMqttActionListener {
         override fun onSuccess(asyncActionToken: IMqttToken?) {
             Timber.d("connectCallback onSuccess $asyncActionToken")
+            mMqttProgress.value = false
+            isConnectRun = false
             mConnectResult.value = Event(RequestResult.SUCCESS)
             mConnectionState.value = Event(ConnectionState.CONNECTED)
             subscribe()
         }
 
         override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
+            mMqttProgress.value = false
+            isConnectRun = false
             mConnectResult.value = Event(
                 RequestResult.FAIL.also { it.str = exception.toString() }
             )
