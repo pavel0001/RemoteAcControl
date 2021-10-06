@@ -94,9 +94,11 @@
         style="@style/MacTextButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="26dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/bg_stroke_button"
         android:gravity="center"
+        android:padding="16dp"
         android:text="@string/setting_demo_preset"
         app:layout_constraintTop_toBottomOf="@id/fs_topic_input_layout" />
 
@@ -105,16 +107,11 @@
         style="@style/MacTextButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="26dp"
+        android:layout_margin="16dp"
         android:background="@drawable/bg_stroke_button"
         android:gravity="center"
+        android:padding="16dp"
         android:text="@string/setting_apply"
         app:layout_constraintTop_toBottomOf="@id/fs_preset_demo" />
-
-    <by.pzmandroid.mac.utils.view.ProgressView
-        android:id="@+id/fs_progress"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
