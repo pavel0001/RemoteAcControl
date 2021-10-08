@@ -11,8 +11,6 @@ import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import by.pzmandroid.mac.R
 import by.pzmandroid.mac.databinding.FragmentRootBinding
-import by.pzmandroid.mac.model.AcFan
-import by.pzmandroid.mac.model.AcMode
 import by.pzmandroid.mac.repository.MqttRepository
 import by.pzmandroid.mac.ui.root.vm.RootVM
 import by.pzmandroid.mac.utils.extensions.safelyNavigate
@@ -36,11 +34,6 @@ class RootFragment : Fragment(R.layout.fragment_root) {
     private fun initUI() {
         with(binding) {
             frTempProgress.spin()
-            frTempSliderValue.text = getString(R.string.root_temperature_for_selector, 17)
-            frTempSlider.addOnChangeListener { _, value, _ ->
-                frTempSliderValue.text = getString(R.string.root_temperature_for_selector, value.toInt())
-                viewModel.selectTemp(value.toInt())
-            }
             frApply.setOnClickListener {
                 viewModel.sendCmd()
             }
@@ -53,27 +46,6 @@ class RootFragment : Fragment(R.layout.fragment_root) {
             }
             frSettings.setOnClickListener {
                 viewModel.disconnect()
-            }
-            frFanSlider.addOnChangeListener { _, value, _ ->
-                frFanSliderValue.text = getString(AcFan.values().first { fan -> fan.numberSlider == value.toInt() }.str)
-                viewModel.setFan(AcFan.values().first { it.numberSlider == value.toInt() })
-            }
-
-            frBottomMenu.setOnItemSelectedListener { menuItem ->
-                when (menuItem.itemId) {
-                    R.id.menu_cool -> viewModel.selectMode(AcMode.Cool)
-                    R.id.menu_dry -> viewModel.selectMode(AcMode.Dry)
-                    R.id.menu_heat -> viewModel.selectMode(AcMode.Heat)
-                    R.id.menu_auto -> viewModel.selectMode(AcMode.Auto)
-                    R.id.menu_fan -> viewModel.selectMode(AcMode.Fan)
-                }
-                true
-            }
-            frFanSlider.setLabelFormatter {
-                getString(AcFan.values().first { fan -> fan.numberSlider == it.toInt() }.str)
-            }
-            frSync.setOnClickListener {
-                viewModel.syncWithCurrent()
             }
         }
     }
@@ -115,15 +87,6 @@ class RootFragment : Fragment(R.layout.fragment_root) {
                 powerButtonState = it.power == 1
                 if (it.power == 1) frAcToggle.setImageResource(R.drawable.ic_power_on)
                 else frAcToggle.setImageResource(R.drawable.ic_power_off)
-                frFanSlider.value = AcFan.values().first { fan -> fan.value == it.fan }.numberSlider.toFloat()
-                frTempSlider.value = it.temp.toFloat()
-                frBottomMenu.selectedItemId = when (it.mode) {
-                    AcMode.Dry.ordinal -> R.id.menu_dry
-                    AcMode.Heat.ordinal -> R.id.menu_heat
-                    AcMode.Auto.ordinal -> R.id.menu_auto
-                    AcMode.Fan.ordinal -> R.id.menu_fan
-                    else -> R.id.menu_cool
-                }
             }
 
         }

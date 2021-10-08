@@ -74,14 +74,64 @@
 
     <ImageView
         android:id="@+id/fr_ac_toggle"
-        android:layout_width="130dp"
-        android:layout_height="130dp"
-        android:layout_marginTop="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/ic_power_on"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/guideline3"
         tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/fr_ac_mode_dry"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_clean"
+        app:layout_constraintCircle="@id/fr_ac_toggle"
+        app:layout_constraintCircleAngle="0"
+        app:layout_constraintCircleRadius="@dimen/dimens_root_circle_radius"
+        tools:ignore="ContentDescription,MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/fr_ac_mode_auto"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_auto"
+        app:layout_constraintCircle="@id/fr_ac_toggle"
+        app:layout_constraintCircleAngle="60"
+        app:layout_constraintCircleRadius="@dimen/dimens_root_circle_radius"
+        tools:ignore="ContentDescription,MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/fr_ac_mode_cool"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_cool"
+        app:layout_constraintCircle="@id/fr_ac_toggle"
+        app:layout_constraintCircleAngle="120"
+        app:layout_constraintCircleRadius="@dimen/dimens_root_circle_radius"
+        tools:ignore="ContentDescription,MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/fr_ac_mode_fan"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_fan"
+        app:layout_constraintCircle="@id/fr_ac_toggle"
+        app:layout_constraintCircleAngle="240"
+        app:layout_constraintCircleRadius="@dimen/dimens_root_circle_radius"
+        tools:ignore="ContentDescription,MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/fr_ac_mode_heat"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_heat"
+        app:layout_constraintCircle="@id/fr_ac_toggle"
+        app:layout_constraintCircleAngle="300"
+        app:layout_constraintCircleRadius="@dimen/dimens_root_circle_radius"
+        tools:ignore="ContentDescription,MissingConstraints" />
 
     <ImageView
         android:id="@+id/fr_turbo"
@@ -93,117 +143,32 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription" />
 
-    <ImageView
-        android:id="@+id/fr_temp_icon"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="16dp"
-        android:src="@drawable/ic_thermometer"
-        app:layout_constraintBottom_toBottomOf="@id/fr_temp_slider"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/fr_temp_slider"
-        tools:ignore="ContentDescription" />
-
-    <com.google.android.material.slider.Slider
-        android:id="@+id/fr_temp_slider"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="42dp"
-        android:stepSize="1"
-        android:valueFrom="17"
-        android:valueTo="30"
-        app:layout_constraintEnd_toStartOf="@id/fr_temp_slider_value"
-        app:layout_constraintStart_toEndOf="@id/fr_temp_icon"
-        app:layout_constraintTop_toBottomOf="@id/fr_ac_toggle" />
-
-    <TextView
-        android:id="@+id/fr_temp_slider_value"
+    <by.pzmandroid.mac.utils.view.VerticalSlider
+        android:id="@+id/fr_fan_slider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:textSize="22sp"
-        app:layout_constraintBottom_toBottomOf="@id/fr_temp_slider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/fr_temp_slider"
-        tools:text="17C" />
-
-    <ImageView
-        android:id="@+id/fr_fan_icon"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="16dp"
-        android:src="@drawable/ic_fan"
-        app:layout_constraintBottom_toBottomOf="@id/fr_fan_slider"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/fr_fan_slider"
-        tools:ignore="ContentDescription" />
-
-    <com.google.android.material.slider.Slider
-        android:id="@+id/fr_fan_slider"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="24dp"
         android:stepSize="1"
         android:valueFrom="0"
         android:valueTo="5"
-        app:layout_constraintEnd_toStartOf="@id/fr_fan_slider_value"
-        app:layout_constraintStart_toEndOf="@id/fr_fan_icon"
-        app:layout_constraintTop_toBottomOf="@id/fr_temp_slider" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fr_ac_toggle" />
 
-    <TextView
-        android:id="@+id/fr_fan_slider_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:ellipsize="end"
-        android:maxLength="4"
-        android:text="@string/fan_high"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@id/fr_fan_slider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/fr_fan_slider" />
-
-    <TextView
+    <ImageView
         android:id="@+id/fr_apply"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_stroke_button"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="8dp"
-        android:text="@string/root_apply"
-        app:layout_constraintBottom_toTopOf="@id/fr_bottom_menu"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/root_apply"
+        android:src="@drawable/ic_top_up"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fr_fan_slider" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fr_sync"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:src="@drawable/ic_sync"
-        app:backgroundTint="#CDEEF1"
-        app:layout_constraintBottom_toTopOf="@id/fr_bottom_menu"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:maxImageSize="36dp"
-        tools:ignore="ContentDescription" />
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/fr_bottom_menu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:backgroundTint="#E5F9FD"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/menu_bottom" />
-
     <by.pzmandroid.mac.utils.view.ProgressView
         android:id="@+id/fr_progress"
-        android:elevation="3dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:elevation="3dp"
         android:visibility="gone" />
 
     <androidx.constraintlayout.widget.Guideline
