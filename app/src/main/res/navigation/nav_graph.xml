@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/rootFragment">
+    app:startDestination="@id/notConnectedFragment">
 
     <action
         android:id="@+id/toSettings"
@@ -11,6 +11,10 @@
     <action
         android:id="@+id/toNotConnected"
         app:destination="@id/notConnectedFragment" />
+
+    <action
+        android:id="@+id/toRoot"
+        app:destination="@+id/rootFragment" />
 
     <fragment
         android:id="@+id/rootFragment"
@@ -22,12 +26,6 @@
 
     <fragment
         android:id="@+id/notConnectedFragment"
-        android:name="by.pzmandroid.mac.ui.notconnected.ui.NotConnectedFragment">
-
-        <action
-            android:id="@+id/toRoot"
-            app:destination="@+id/rootFragment" />
-
-    </fragment>
+        android:name="by.pzmandroid.mac.ui.notconnected.ui.NotConnectedFragment"/>
 
 </navigation>

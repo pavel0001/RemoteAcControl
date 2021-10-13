@@ -41,6 +41,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     return@setOnClickListener
                 }
                 saveSettings()
+                MacApp.instance.setNotConnectedRun(true)
                 findNavController().safelyNavigate(SettingsFragmentDirections.toNotConnected())
             }
         }

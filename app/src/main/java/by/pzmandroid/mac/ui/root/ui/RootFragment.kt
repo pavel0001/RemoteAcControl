@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -16,7 +17,6 @@ import by.pzmandroid.mac.databinding.FragmentRootBinding
 import by.pzmandroid.mac.model.AcMode
 import by.pzmandroid.mac.repository.MqttRepository
 import by.pzmandroid.mac.ui.root.vm.RootVM
-import by.pzmandroid.mac.utils.extensions.safelyNavigate
 
 class RootFragment : Fragment(R.layout.fragment_root) {
 
@@ -36,6 +36,11 @@ class RootFragment : Fragment(R.layout.fragment_root) {
 
     private fun initUI() {
         with(binding) {
+            activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    viewModel.disconnect()
+                }
+            })
             frTempProgress.spin()
             frApply.setOnClickListener {
                 viewModel.sendCmd()
@@ -77,7 +82,7 @@ class RootFragment : Fragment(R.layout.fragment_root) {
             viewModel.connectResult.observe(viewLifecycleOwner) { connectResult ->
                 connectResult.getIfPending()?.let {
                     if (it != MqttRepository.ConnectionState.CONNECTED) {
-                        findNavController().safelyNavigate(RootFragmentDirections.toNotConnected())
+                        findNavController().popBackStack()
                     }
                 }
             }
