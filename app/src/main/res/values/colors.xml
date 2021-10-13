@@ -1,34 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="colorWhite">#ffffff</color>
-    <color name="colorDarkWhite">#F4F4F4</color>
-    <color name="colorBlack">#000000</color>
-    <color name="colorGrayMedium">#848C9B</color>
-    <color name="colorAccent">#5C6AD5</color>
+    <color name="colorWhite">#FFFFFF</color>
 
-    <color name="colorPositive">#FF669900</color>
-    <color name="colorNegative">#FFFF4444</color>
+    <color name="colorCharade">#213E45</color>
+    <color name="colorRaven">#72757A</color>
 
-    <color name="dialogBackground">#B3000000</color>
+    <color name="colorSecondaryBg">#427987</color>
+    <color name="colorSecondaryLightBg">#8AB7C3</color>
+    <color name="colorBgLines">#8AB7C3</color>
 
-    <color name="colorCharade">#2C2C34</color>
-    <color name="colorMinsk">#3A3285</color>
-    <color name="colorMinskTransparent">#143A3285</color>
-    <color name="colorRaven">#7C828F</color>
-    <color name="colorCatSkillWhite">#E3ECF3</color>
-    <color name="colorTransparentBlack">#80000000</color>
-    <color name="colorSilverChalice">#A4A4A4</color>
-    <color name="colorTundora">#414141</color>
-    <color name="colorCardinal">#D22124</color>
-    <color name="colorSushi">#7EB02F</color>
-    <color name="colorBotticelli">#CFD6E6</color>
-    <color name="colorAlabaster">#F9F9F9</color>
-    <color name="colorWhisper">#F0EFF6</color>
+    <color name="colorModeSelected">#F19100</color>
+    <color name="colorModeNormal">#A0D2DF</color>
+
+    <color name="colorHeat">#F49E1D</color>
+    <color name="colorCold">#71DBED</color>
 </resources>

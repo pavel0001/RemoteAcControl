@@ -1,7 +1,9 @@
 package by.pzmandroid.mac.ui.root.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
@@ -11,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import by.pzmandroid.mac.R
 import by.pzmandroid.mac.databinding.FragmentRootBinding
-import by.pzmandroid.mac.model.AcFan
 import by.pzmandroid.mac.model.AcMode
 import by.pzmandroid.mac.repository.MqttRepository
 import by.pzmandroid.mac.ui.root.vm.RootVM
@@ -27,7 +28,7 @@ class RootFragment : Fragment(R.layout.fragment_root) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.let {
-            //viewModel.initMqtt(it)
+            viewModel.syncWithCurrent()
             initUI()
             initVM(it)
         }
@@ -36,11 +37,6 @@ class RootFragment : Fragment(R.layout.fragment_root) {
     private fun initUI() {
         with(binding) {
             frTempProgress.spin()
-            frTempSliderValue.text = getString(R.string.root_temperature_for_selector, 17)
-            frTempSlider.addOnChangeListener { _, value, _ ->
-                frTempSliderValue.text = getString(R.string.root_temperature_for_selector, value.toInt())
-                viewModel.selectTemp(value.toInt())
-            }
             frApply.setOnClickListener {
                 viewModel.sendCmd()
             }
@@ -51,29 +47,27 @@ class RootFragment : Fragment(R.layout.fragment_root) {
                 viewModel.acTogglePower()
                 togglePoserBtn()
             }
-            frSettings.setOnClickListener {
+            frDisconnect.setOnClickListener {
                 viewModel.disconnect()
             }
-            frFanSlider.addOnChangeListener { _, value, _ ->
-                frFanSliderValue.text = getString(AcFan.values().first { fan -> fan.numberSlider == value.toInt() }.str)
-                viewModel.setFan(AcFan.values().first { it.numberSlider == value.toInt() })
+            frAcModeCool.setOnClickListener {
+                viewModel.selectMode(AcMode.Cool)
             }
-
-            frBottomMenu.setOnItemSelectedListener { menuItem ->
-                when (menuItem.itemId) {
-                    R.id.menu_cool -> viewModel.selectMode(AcMode.Cool)
-                    R.id.menu_dry -> viewModel.selectMode(AcMode.Dry)
-                    R.id.menu_heat -> viewModel.selectMode(AcMode.Heat)
-                    R.id.menu_auto -> viewModel.selectMode(AcMode.Auto)
-                    R.id.menu_fan -> viewModel.selectMode(AcMode.Fan)
-                }
-                true
+            frAcModeAuto.setOnClickListener {
+                viewModel.selectMode(AcMode.Auto)
             }
-            frFanSlider.setLabelFormatter {
-                getString(AcFan.values().first { fan -> fan.numberSlider == it.toInt() }.str)
+            frAcModeDry.setOnClickListener {
+                viewModel.selectMode(AcMode.Dry)
             }
-            frSync.setOnClickListener {
-                viewModel.syncWithCurrent()
+            frAcModeFan.setOnClickListener {
+                viewModel.selectMode(AcMode.Fan)
+            }
+            frAcModeHeat.setOnClickListener {
+                viewModel.selectMode(AcMode.Heat)
+            }
+            frTempSlider.setOnValueChangeListener {
+                frTempValue.text = getString(R.string.root_temperature_for_selector, it)
+                viewModel.selectTemp(it)
             }
         }
     }
@@ -115,17 +109,11 @@ class RootFragment : Fragment(R.layout.fragment_root) {
                 powerButtonState = it.power == 1
                 if (it.power == 1) frAcToggle.setImageResource(R.drawable.ic_power_on)
                 else frAcToggle.setImageResource(R.drawable.ic_power_off)
-                frFanSlider.value = AcFan.values().first { fan -> fan.value == it.fan }.numberSlider.toFloat()
-                frTempSlider.value = it.temp.toFloat()
-                frBottomMenu.selectedItemId = when (it.mode) {
-                    AcMode.Dry.ordinal -> R.id.menu_dry
-                    AcMode.Heat.ordinal -> R.id.menu_heat
-                    AcMode.Auto.ordinal -> R.id.menu_auto
-                    AcMode.Fan.ordinal -> R.id.menu_fan
-                    else -> R.id.menu_cool
+                if (frTempSlider.getValue() != it.temp) {
+                    frTempSlider.setupSlider(it.temp.toFloat())
                 }
+                calculateEnabledMode(activity, it.mode)
             }
-
         }
     }
 
@@ -139,5 +127,27 @@ class RootFragment : Fragment(R.layout.fragment_root) {
                 true
             }
         }
+    }
+
+    private fun calculateEnabledMode(context: Context, mode: Int) {
+        with(binding) {
+            frAcModeCool.putOnMode(context, mode == AcMode.Cool.value)
+            frAcModeAuto.putOnMode(context, mode == AcMode.Auto.value)
+            frAcModeDry.putOnMode(context, mode == AcMode.Dry.value)
+            frAcModeFan.putOnMode(context, mode == AcMode.Fan.value)
+            frAcModeHeat.putOnMode(context, mode == AcMode.Heat.value)
+        }
+    }
+
+    private fun ImageView.putOnMode(context: Context, isEnabled: Boolean) {
+        this.drawable.setTint(
+            context.getColor(
+                if (isEnabled) {
+                    R.color.colorModeSelected
+                } else {
+                    R.color.colorModeNormal
+                }
+            )
+        )
     }
 }

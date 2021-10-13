@@ -41,8 +41,9 @@
     <!--xgiant-->
     <dimen name="font_size_xgiant">40sp</dimen>
     <!--extra_giant-->
-    <dimen name="font_size_extra_giant">72sp</dimen>
+    <dimen name="font_size_extra_giant">74sp</dimen>
 
     <dimen name="card_text_size">25sp</dimen>
     <dimen name="auth_button_height">67dp</dimen>
+    <dimen name="dimens_root_circle_radius">100dp</dimen>
 </resources>

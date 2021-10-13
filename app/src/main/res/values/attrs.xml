@@ -3,11 +3,23 @@
     <attr name="colorOnSurface" format="color" />
     <attr name="MacColorLightBg" format="color" />
     <attr name="MacColorLightBgPrimary" format="color" />
-    <attr name="MacColorAccentBg" format="color" />
-    <attr name="MacColorUtilityBg" format="color" />
+    <attr name="MacColorNeutral" format="color" />
+    <attr name="MacColorAccent" format="color" />
     <attr name="MacColorSecondaryBg" format="color" />
     <attr name="MacColorInversedText" format="color" />
     <attr name="MacColorPrimaryText" format="color" />
     <attr name="MacColorSecondaryText" format="color" />
     <attr name="MacColorDarkIcon" format="color" />
+    <attr name="MacColorSecondaryLightBg" format="color" />
+
+    <declare-styleable name="VerticalSlider">
+        <attr name="customRowHeight" format="float" />
+        <attr name="customDelimiterHeight" format="float" />
+        <attr name="minValue" format="float" />
+        <attr name="maxValue" format="float" />
+        <attr name="rowCornerRadius" format="float" />
+        <attr name="sliderPadding" format="dimension" />
+        <attr name="bottomColor" format="color" />
+        <attr name="topColor" format="color" />
+    </declare-styleable>
 </resources>

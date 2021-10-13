@@ -6,29 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:background="@drawable/bg_root_grad"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/fr_settings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="32dp"
-        android:src="@drawable/ic_disconnect"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription" />
-
     <com.pnikosis.materialishprogress.ProgressWheel
         android:id="@+id/fr_temp_progress"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:foregroundGravity="center"
-        app:layout_constraintBottom_toTopOf="@id/guideline3"
+        app:layout_constraintBottom_toBottomOf="@id/fr_temperature"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:matProg_fillRadius="true"
@@ -36,26 +19,45 @@
         wheel:matProg_barColor="#C9FFF4"
         wheel:matProg_progressIndeterminate="true" />
 
-    <TextView
-        android:id="@+id/fr_temperature"
+    <ImageView
+        android:id="@+id/fr_disconnect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="?attr/colorOnSecondary"
-        android:textSize="82sp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/guideline3"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_disconnect"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/fr_temperature"
+        style="@style/MacText.Inversed.ExtraGiant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="54dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@id/fr_right_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="32"
         tools:visibility="visible" />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_temp_inhouse"
+        app:layout_constraintBottom_toBottomOf="@id/fr_temperature"
+        app:layout_constraintStart_toEndOf="@id/fr_temperature"
+        app:layout_constraintTop_toBottomOf="@id/fr_temperature_sign"
+        app:tint="?attr/MacColorDarkIcon" />
+
     <TextView
         android:id="@+id/fr_pressure"
+        style="@style/MacText.Hint.Normal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textColor="?attr/colorOnSecondary"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@id/guideline3"
+        android:ellipsize="end"
+        android:lines="1"
         app:layout_constraintEnd_toEndOf="@id/fr_temperature_sign"
         app:layout_constraintStart_toStartOf="@id/fr_temperature"
         app:layout_constraintTop_toBottomOf="@id/fr_temperature"
@@ -63,154 +65,144 @@
 
     <TextView
         android:id="@+id/fr_temperature_sign"
+        style="@style/MacText.Hint.Huge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/root_temperature_celsius"
-        android:textColor="#8A000000"
-        android:textSize="52sp"
         android:visibility="gone"
         app:layout_constraintStart_toEndOf="@id/fr_temperature"
-        app:layout_constraintTop_toTopOf="@id/fr_temperature" />
+        app:layout_constraintTop_toTopOf="@id/fr_temperature"
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/fr_ac_toggle"
-        android:layout_width="130dp"
-        android:layout_height="130dp"
-        android:layout_marginTop="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/ic_power_on"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/fr_apply"
+        app:layout_constraintEnd_toStartOf="@id/fr_right_container"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guideline3"
+        app:layout_constraintTop_toBottomOf="@id/fr_temperature"
         tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/fr_ac_mode_dry"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_clean"
+        app:layout_constraintCircle="@id/fr_ac_toggle"
+        app:layout_constraintCircleAngle="0"
+        app:layout_constraintCircleRadius="@dimen/dimens_root_circle_radius"
+        tools:ignore="ContentDescription,MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/fr_ac_mode_auto"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_auto"
+        app:layout_constraintCircle="@id/fr_ac_toggle"
+        app:layout_constraintCircleAngle="60"
+        app:layout_constraintCircleRadius="@dimen/dimens_root_circle_radius"
+        tools:ignore="ContentDescription,MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/fr_ac_mode_cool"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_cool"
+        app:layout_constraintCircle="@id/fr_ac_toggle"
+        app:layout_constraintCircleAngle="120"
+        app:layout_constraintCircleRadius="@dimen/dimens_root_circle_radius"
+        tools:ignore="ContentDescription,MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/fr_ac_mode_fan"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_fan"
+        app:layout_constraintCircle="@id/fr_ac_toggle"
+        app:layout_constraintCircleAngle="240"
+        app:layout_constraintCircleRadius="@dimen/dimens_root_circle_radius"
+        tools:ignore="ContentDescription,MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/fr_ac_mode_heat"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_heat"
+        app:layout_constraintCircle="@id/fr_ac_toggle"
+        app:layout_constraintCircleAngle="300"
+        app:layout_constraintCircleRadius="@dimen/dimens_root_circle_radius"
+        tools:ignore="ContentDescription,MissingConstraints" />
+
+    <TextView
+        android:id="@+id/fr_apply"
+        style="@style/MacTextButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:paddingVertical="16dp"
+        android:text="@string/root_apply"
+        android:textSize="@dimen/font_size_pre_giant"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/fr_right_container"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:id="@+id/fr_right_container"
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        android:background="?attr/MacColorSecondaryBg"
+        android:elevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageView
         android:id="@+id/fr_turbo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="32dp"
+        android:layout_marginTop="26dp"
+        android:elevation="15dp"
         android:src="@drawable/ic_turbo"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/fr_right_container"
+        app:layout_constraintStart_toStartOf="@id/fr_right_container"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription" />
 
-    <ImageView
-        android:id="@+id/fr_temp_icon"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="16dp"
-        android:src="@drawable/ic_thermometer"
-        app:layout_constraintBottom_toBottomOf="@id/fr_temp_slider"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/fr_temp_slider"
-        tools:ignore="ContentDescription" />
+    <TextView
+        android:id="@+id/fr_temp_value"
+        style="@style/MacText.Inversed.Huge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:elevation="10dp"
+        app:layout_constraintEnd_toEndOf="@id/fr_right_container"
+        app:layout_constraintStart_toStartOf="@id/fr_right_container"
+        app:layout_constraintTop_toBottomOf="@id/fr_turbo"
+        tools:text="32" />
 
-    <com.google.android.material.slider.Slider
+    <by.pzmandroid.mac.utils.view.VerticalSlider
         android:id="@+id/fr_temp_slider"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="42dp"
-        android:stepSize="1"
-        android:valueFrom="17"
-        android:valueTo="30"
-        app:layout_constraintEnd_toStartOf="@id/fr_temp_slider_value"
-        app:layout_constraintStart_toEndOf="@id/fr_temp_icon"
-        app:layout_constraintTop_toBottomOf="@id/fr_ac_toggle" />
-
-    <TextView
-        android:id="@+id/fr_temp_slider_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:textSize="22sp"
-        app:layout_constraintBottom_toBottomOf="@id/fr_temp_slider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/fr_temp_slider"
-        tools:text="17C" />
-
-    <ImageView
-        android:id="@+id/fr_fan_icon"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="16dp"
-        android:src="@drawable/ic_fan"
-        app:layout_constraintBottom_toBottomOf="@id/fr_fan_slider"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/fr_fan_slider"
-        tools:ignore="ContentDescription" />
-
-    <com.google.android.material.slider.Slider
-        android:id="@+id/fr_fan_slider"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="24dp"
-        android:stepSize="1"
-        android:valueFrom="0"
-        android:valueTo="5"
-        app:layout_constraintEnd_toStartOf="@id/fr_fan_slider_value"
-        app:layout_constraintStart_toEndOf="@id/fr_fan_icon"
-        app:layout_constraintTop_toBottomOf="@id/fr_temp_slider" />
-
-    <TextView
-        android:id="@+id/fr_fan_slider_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:ellipsize="end"
-        android:maxLength="4"
-        android:text="@string/fan_high"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@id/fr_fan_slider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/fr_fan_slider" />
-
-    <TextView
-        android:id="@+id/fr_apply"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
         android:background="@drawable/bg_stroke_button"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="8dp"
-        android:text="@string/root_apply"
-        app:layout_constraintBottom_toTopOf="@id/fr_bottom_menu"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fr_fan_slider" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fr_sync"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:src="@drawable/ic_sync"
-        app:backgroundTint="#CDEEF1"
-        app:layout_constraintBottom_toTopOf="@id/fr_bottom_menu"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:maxImageSize="36dp"
-        tools:ignore="ContentDescription" />
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/fr_bottom_menu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:backgroundTint="#E5F9FD"
+        android:elevation="10dp"
+        app:bottomColor="@color/colorCold"
+        app:customDelimiterHeight="0.005"
+        app:customRowHeight="0.05"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/menu_bottom" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fr_temp_value"
+        app:maxValue="30"
+        app:minValue="17"
+        app:sliderPadding="4dp"
+        app:topColor="@color/colorHeat" />
 
     <by.pzmandroid.mac.utils.view.ProgressView
         android:id="@+id/fr_progress"
-        android:elevation="3dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:elevation="3dp"
         android:visibility="gone" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.25" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
