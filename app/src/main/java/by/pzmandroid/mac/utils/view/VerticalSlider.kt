@@ -34,7 +34,7 @@ class VerticalSlider @JvmOverloads constructor(
     private var maxValue = 0F
     private var minValue = 0F
 
-    private var progress = 500F
+    private var progress = 0F
 
     private var scalePaint: Paint
 

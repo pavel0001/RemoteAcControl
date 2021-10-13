@@ -16,6 +16,9 @@ class MacApp : Application() {
     private val credClientId = "credClientId"
     private val credTopic = "credTopic"
 
+    var firstNotConnectedRun = true
+        private set
+
     var credentials: Credits? = null
         private set
 
@@ -56,5 +59,9 @@ class MacApp : Application() {
             clientId = sharedPreferences.getString(credClientId, MQTT_CLIENT_ID)!!,
             topic = sharedPreferences.getString(credTopic, MQTT_TOPIC_ROOT)!!
         )
+    }
+
+    fun setNotConnectedRun(isItFirstConnect: Boolean) {
+        firstNotConnectedRun = isItFirstConnect
     }
 }

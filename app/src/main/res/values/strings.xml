@@ -33,9 +33,9 @@
 
     <string name="progress_setting">К настройкам</string>
 
-    <string name="notconnected_title">Соединение не установлено</string>
-    <string name="notconnected_refresh">Повторить подключение</string>
-    <string name="notconnected_setting">К настройкам</string>
-    <string name="notconnected_progress">Подключаемся…</string>
+    <string name="not_connected_title">Соединение не установлено</string>
+    <string name="not_connected_refresh">Подключиться</string>
+    <string name="not_connected_setting">К настройкам</string>
+    <string name="not_connected_progress">Подключаемся…</string>
 
 </resources>
