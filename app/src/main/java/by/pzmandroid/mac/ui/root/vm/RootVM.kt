@@ -32,9 +32,9 @@ class RootVM : ViewModel() {
         sendCmd()
     }
 
-    fun setFan(fan: AcFan) {
+/*    fun setFan(fan: AcFan) {
         CmdRepository.setFan(fan)
-    }
+    }*/
 
     fun selectMode(mode: AcMode) {
         CmdRepository.setMode(mode)

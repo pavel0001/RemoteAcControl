@@ -7,6 +7,7 @@
     <string name="root_temperature_for_selector">%d\u2103</string>
     <string name="root_apply">Apply</string>
     <string name="root_pressure">%d mm.hg.s.</string>
+    <string name="root_progress">Loading…</string>
 
     <string name="menu_bottom_cool">Cool</string>
     <string name="menu_bottom_heat">Heat</string>

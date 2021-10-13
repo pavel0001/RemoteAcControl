@@ -6,6 +6,7 @@
     <string name="root_temperature_for_selector">%d\u2103</string>
     <string name="root_apply">Применить</string>
     <string name="root_pressure">%d мм.рт.ст.</string>
+    <string name="root_progress">Загрузка…</string>
 
     <string name="menu_bottom_cool">Охлаждение</string>
     <string name="menu_bottom_heat">Обогрев</string>

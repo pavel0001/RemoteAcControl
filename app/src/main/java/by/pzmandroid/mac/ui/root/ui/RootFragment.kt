@@ -15,6 +15,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import by.pzmandroid.mac.R
 import by.pzmandroid.mac.databinding.FragmentRootBinding
 import by.pzmandroid.mac.model.AcMode
+import by.pzmandroid.mac.model.AcPower
 import by.pzmandroid.mac.repository.MqttRepository
 import by.pzmandroid.mac.ui.root.vm.RootVM
 
@@ -22,8 +23,6 @@ class RootFragment : Fragment(R.layout.fragment_root) {
 
     private val viewModel by viewModels<RootVM>()
     private val binding by viewBinding(FragmentRootBinding::bind)
-
-    private var powerButtonState = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -50,7 +49,6 @@ class RootFragment : Fragment(R.layout.fragment_root) {
             }
             frAcToggle.setOnClickListener {
                 viewModel.acTogglePower()
-                togglePoserBtn()
             }
             frDisconnect.setOnClickListener {
                 viewModel.disconnect()
@@ -73,6 +71,9 @@ class RootFragment : Fragment(R.layout.fragment_root) {
             frTempSlider.setOnValueChangeListener {
                 frTempValue.text = getString(R.string.root_temperature_for_selector, it)
                 viewModel.selectTemp(it)
+            }
+            frSync.setOnClickListener {
+                viewModel.syncWithCurrent()
             }
         }
     }
@@ -111,9 +112,7 @@ class RootFragment : Fragment(R.layout.fragment_root) {
             }
 
             viewModel.syncState.observe(viewLifecycleOwner) {
-                powerButtonState = it.power == 1
-                if (it.power == 1) frAcToggle.setImageResource(R.drawable.ic_power_on)
-                else frAcToggle.setImageResource(R.drawable.ic_power_off)
+                togglePowerBtn(it.power == AcPower.ON.value)
                 if (frTempSlider.getValue() != it.temp) {
                     frTempSlider.setupSlider(it.temp.toFloat())
                 }
@@ -122,15 +121,15 @@ class RootFragment : Fragment(R.layout.fragment_root) {
         }
     }
 
-    private fun togglePoserBtn() {
+    private fun togglePowerBtn(isEnabled: Boolean) {
         with(binding) {
-            powerButtonState = if (powerButtonState) {
-                frAcToggle.setImageResource(R.drawable.ic_power_off)
-                false
-            } else {
-                frAcToggle.setImageResource(R.drawable.ic_power_on)
-                true
-            }
+            frAcToggle.setImageResource(
+                if (isEnabled) {
+                    R.drawable.ic_power_on
+                } else {
+                    R.drawable.ic_power_off
+                }
+            )
         }
     }
 
