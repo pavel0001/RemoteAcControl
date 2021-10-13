@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import by.pzmandroid.mac.MQTTClient
 import by.pzmandroid.mac.MacApp
+import by.pzmandroid.mac.SUBSCRIBE_STATE_NOT_SUBSCRIBED
 import by.pzmandroid.mac.model.AcState
 import by.pzmandroid.mac.model.Credits
 import by.pzmandroid.mac.model.SensorResponse
@@ -44,7 +45,6 @@ object MqttRepository {
     private var isConnectRun: Boolean = false
 
     fun initializeAndConnect(context: Context) {
-        Timber.d("init mqtt")
         refreshCredits()
         mMqttProgress.value = true
         mqttClient?.close()
@@ -55,7 +55,6 @@ object MqttRepository {
     }
 
     private fun refreshCredits() {
-        Timber.d("refreshCredits")
         MacApp.instance.credentials?.let {
             credits = it
         }
@@ -80,9 +79,19 @@ object MqttRepository {
     }
 
     fun disconnect() {
-        mqttClient?.let {
-            if (it.isConnected())
-                it.disconnect()
+        mqttClient?.let { mqtt ->
+            if (mqtt.isConnected()) {
+                if (mqtt.isSubscribe) {
+                    mqtt.setSubscribeStateChangeListener {
+                        if (it == SUBSCRIBE_STATE_NOT_SUBSCRIBED) {
+                            mqtt.disconnect()
+                        } else {
+                            mqtt.unsubscribe("${credits.topic}+")
+                        }
+                    }
+                    mqtt.unsubscribe("${credits.topic}+")
+                }
+            }
         }
     }
 
@@ -131,6 +140,7 @@ object MqttRepository {
         override fun messageArrived(topic: String?, message: MqttMessage?) {
             when (topic) {
                 credits.MQTT_TOPIC_SENSOR -> {
+                    Timber.d("Message is arrive $topic $message")
                     Klaxon().parse<SensorResponse>(message.toString())?.let { data ->
                         mReceivedMessage.value = data
                     }
@@ -167,9 +177,9 @@ object MqttRepository {
         }
     }
 
-    enum class RequestResult(var str: String) {
-        SUCCESS("Доставлено"),
-        FAIL("Ошибка")
+    enum class RequestResult(var str: String = String()) {
+        SUCCESS,
+        FAIL
     }
 
     enum class ConnectionState {

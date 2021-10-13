@@ -32,9 +32,8 @@ object CmdRepository {
 
     fun togglePower() {
         currentState.value?.let {
-            mCurrentState.value = currentState.value?.copy(
-                power =
-                if (it.power == AcPower.OFF.value)
+            mCurrentState.value = it.copy(
+                power = if (it.power == AcPower.OFF.value)
                     AcPower.ON.value
                 else
                     AcPower.OFF.value
