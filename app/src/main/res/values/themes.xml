@@ -1,30 +1,20 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.MAC" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorOnSurface">@color/black</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
+        <item name="MacColorLightBg">@color/colorWhite</item>
+        <item name="MacColorNeutral">@color/colorModeNormal</item>
+        <item name="MacColorAccent">@color/colorModeSelected</item>
+        <item name="MacColorSecondaryBg">@color/colorSecondaryBg</item>
+        <item name="MacColorSecondaryLightBg">@color/colorSecondaryLightBg</item>
+        <item name="MacColorPrimaryText">@color/colorCharade</item>
+        <item name="MacColorInversedText">@color/colorWhite</item>
+        <item name="MacColorSecondaryText">@color/colorRaven</item>
+        <item name="MacColorDarkIcon">@color/colorRaven</item>
+        <!-- Customize your theme here. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <item name="android:windowBackground">@drawable/bg_lines_dots</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:scaleType">centerCrop</item>
-        <item name="MacColorLightBgPrimary">@color/colorCatSkillWhite</item>
-        <item name="MacColorLightBg">@color/colorWhite</item>
-        <item name="MacColorAccentBg">@color/colorMinskTransparent</item>
-        <item name="MacColorUtilityBg">@color/colorWhisper</item>
-        <item name="MacColorSecondaryBg">@color/colorAlabaster</item>
-        <item name="MacColorPrimaryText">@color/colorCharade</item>
-        <item name="MacColorInversedText">@color/colorWhite</item>
-        <item name="MacColorSecondaryText">@color/colorMinsk</item>
-        <item name="MacColorDarkIcon">@color/colorRaven</item>
-        <!-- Customize your theme here. -->
     </style>
 
     <style name="MacText">
@@ -50,8 +40,36 @@
         <item name="android:textSize">@dimen/font_size_xgiant</item>
     </style>
 
+    <style name="MacText.Primary.ExtraGiant">
+        <item name="android:textSize">@dimen/font_size_extra_giant</item>
+    </style>
+
     <style name="MacText.Inversed">
         <item name="android:textColor">?attr/MacColorInversedText</item>
+    </style>
+
+    <style name="MacText.Inversed.Normal">
+        <item name="android:textSize">@dimen/font_size_normal</item>
+    </style>
+
+    <style name="MacText.Inversed.Huge">
+        <item name="android:textSize">@dimen/font_size_huge</item>
+    </style>
+
+    <style name="MacText.Inversed.ExtraGiant">
+        <item name="android:textSize">@dimen/font_size_extra_giant</item>
+    </style>
+
+    <style name="MacText.Hint">
+        <item name="android:textColor">?attr/MacColorDarkIcon</item>
+    </style>
+
+    <style name="MacText.Hint.Normal">
+        <item name="android:textSize">@dimen/font_size_normal</item>
+    </style>
+
+    <style name="MacText.Hint.Huge">
+        <item name="android:textSize">@dimen/font_size_huge</item>
     </style>
 
     <style name="MacInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">

@@ -35,4 +35,9 @@
     <string name="setting_demo_preset">Test preset</string>
 
     <string name="progress_setting">Settings</string>
+
+    <string name="notconnected_title">Not connected</string>
+    <string name="notconnected_refresh">Try connect</string>
+    <string name="notconnected_setting">To settings</string>
+    <string name="notconnected_progress">Connecting…</string>
 </resources>

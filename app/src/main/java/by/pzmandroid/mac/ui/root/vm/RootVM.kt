@@ -1,13 +1,11 @@
 package by.pzmandroid.mac.ui.root.vm
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.pzmandroid.mac.model.AcFan
 import by.pzmandroid.mac.model.AcMode
-import by.pzmandroid.mac.model.AcState
 import by.pzmandroid.mac.model.AcTurbo
 import by.pzmandroid.mac.repository.CmdRepository
 import by.pzmandroid.mac.repository.MqttRepository
@@ -24,16 +22,10 @@ class RootVM : ViewModel() {
 
     private val currentAcStateFromEsp = MqttRepository.currentAcState
 
-    private val mSyncState = MutableLiveData<AcState>()
-    val syncState: LiveData<AcState> = mSyncState
+    val syncState = CmdRepository.currentState
 
     private val mSyncProgress = MutableLiveData(false)
     val syncProgress: LiveData<Boolean> = mSyncProgress
-
-    fun initMqtt(context: Context) {
-        MqttRepository.initializeAndConnect(context)
-        syncWithCurrent()
-    }
 
     fun acTogglePower() {
         CmdRepository.togglePower()
@@ -73,9 +65,6 @@ class RootVM : ViewModel() {
                     flag = false
                 }
                 delay(1000)
-            }
-            CmdRepository.currentState.value?.let {
-                mSyncState.value = it
             }
             mSyncProgress.value = false
         }
