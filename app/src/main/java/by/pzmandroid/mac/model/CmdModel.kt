@@ -5,7 +5,7 @@ import by.pzmandroid.mac.R
 data class AcState(
     val power: Int = AcPower.ON.value,
     val mode: Int = AcMode.Cool.ordinal,
-    val temp: Int = 17,
+    val temp: Int = 21,
     val fan: Int = AcFan.High.value,
     val swingV: Int = AcSwingV.Auto.value,
     val swingH: Int = AcSwingH.Auto.value,

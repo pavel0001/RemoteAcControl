@@ -8,6 +8,7 @@
     <string name="root_apply">Apply</string>
     <string name="root_pressure">%d mm.hg.s.</string>
     <string name="root_progress">Loading…</string>
+    <string name="root_sync_error">Sync error. Not found messages in topic</string>
 
     <string name="menu_bottom_cool">Cool</string>
     <string name="menu_bottom_heat">Heat</string>

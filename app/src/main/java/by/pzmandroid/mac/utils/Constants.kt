@@ -5,3 +5,4 @@ const val MQTT_CLIENT_ID = ""
 const val MQTT_LOGIN = ""
 const val MQTT_PWD = ""
 const val MQTT_TOPIC_ROOT = "demo/"
+const val SYNC_TIMEOUT = 15

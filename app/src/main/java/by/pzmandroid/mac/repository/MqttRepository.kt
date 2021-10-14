@@ -39,8 +39,8 @@ object MqttRepository {
     private val mReceivedMessage = MutableLiveData<SensorResponse>()
     val receivedMessage: LiveData<SensorResponse> = mReceivedMessage
 
-    private val mCurrentAcState = MutableLiveData<AcState>()
-    val currentAcState: LiveData<AcState> = mCurrentAcState
+    private val mCurrentAcState = MutableLiveData<Event<AcState>>()
+    val currentAcState: LiveData<Event<AcState>> = mCurrentAcState
 
     private var isConnectRun: Boolean = false
 
@@ -90,6 +90,8 @@ object MqttRepository {
                         }
                     }
                     mqtt.unsubscribe("${credits.topic}+")
+                } else {
+                    mqtt.disconnect()
                 }
             }
         }
@@ -147,7 +149,7 @@ object MqttRepository {
                 }
                 credits.MQTT_TOPIC_CALLBACK -> {
                     jsonToModel(message.toString())?.let {
-                        mCurrentAcState.value = it
+                        mCurrentAcState.value = Event(it)
                     }
                 }
             }

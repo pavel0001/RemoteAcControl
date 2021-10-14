@@ -33,6 +33,7 @@ class VerticalSlider @JvmOverloads constructor(
 
     private var maxValue = 0F
     private var minValue = 0F
+    private var currentValue = 0F
 
     private var progress = 0F
 
@@ -74,7 +75,9 @@ class VerticalSlider @JvmOverloads constructor(
         if (cornerRadius == 0F && padding != 0) {
             cornerRadius = padding.toFloat()
         }
-
+        if (currentValue != 0F) {
+            setupSlider(currentValue)
+        }
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(heightMeasureSpec))
     }
 
@@ -119,6 +122,7 @@ class VerticalSlider @JvmOverloads constructor(
     }
 
     fun setupSlider(current: Float) {
+        currentValue = current
         progress = heightWithPadding.minus((heightWithPadding.div(maxValue - minValue).times(current.minus(minValue))))
         defaultListener.invoke(getValue())
         invalidate()

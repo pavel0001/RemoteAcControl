@@ -80,6 +80,22 @@ class RootFragment : Fragment(R.layout.fragment_root) {
 
     private fun initVM(activity: FragmentActivity) {
         with(binding) {
+            viewModel.syncState.observe(viewLifecycleOwner) {
+                togglePowerBtn(it.power == AcPower.ON.value)
+                if (frTempSlider.getValue() != it.temp) {
+                    frTempSlider.setupSlider(it.temp.toFloat())
+                }
+                calculateEnabledMode(activity, it.mode)
+            }
+
+            viewModel.syncError.observe(viewLifecycleOwner) { syncError ->
+                syncError.getIfPending()?.let {
+                    if (it == MqttRepository.RequestResult.FAIL) {
+                        Toast.makeText(activity, getString(R.string.root_sync_error), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+
             viewModel.connectResult.observe(viewLifecycleOwner) { connectResult ->
                 connectResult.getIfPending()?.let {
                     if (it != MqttRepository.ConnectionState.CONNECTED) {
@@ -108,15 +124,9 @@ class RootFragment : Fragment(R.layout.fragment_root) {
             }
 
             viewModel.publishResult.observe(viewLifecycleOwner) {
-                Toast.makeText(activity, it.str, Toast.LENGTH_SHORT).show()
-            }
-
-            viewModel.syncState.observe(viewLifecycleOwner) {
-                togglePowerBtn(it.power == AcPower.ON.value)
-                if (frTempSlider.getValue() != it.temp) {
-                    frTempSlider.setupSlider(it.temp.toFloat())
+                if (it.str.isNotEmpty()) {
+                    Toast.makeText(activity, it.str, Toast.LENGTH_SHORT).show()
                 }
-                calculateEnabledMode(activity, it.mode)
             }
         }
     }

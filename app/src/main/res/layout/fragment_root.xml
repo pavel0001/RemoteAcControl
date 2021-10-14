@@ -78,7 +78,7 @@
         android:id="@+id/fr_ac_toggle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_power_on"
+        android:src="@drawable/ic_power_off"
         app:layout_constraintBottom_toTopOf="@id/fr_apply"
         app:layout_constraintEnd_toStartOf="@id/fr_right_container"
         app:layout_constraintStart_toStartOf="parent"

@@ -2,7 +2,10 @@ package by.pzmandroid.mac.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import by.pzmandroid.mac.model.*
+import by.pzmandroid.mac.model.AcMode
+import by.pzmandroid.mac.model.AcPower
+import by.pzmandroid.mac.model.AcState
+import by.pzmandroid.mac.model.AcTurbo
 import com.beust.klaxon.Klaxon
 
 object CmdRepository {
@@ -22,13 +25,9 @@ object CmdRepository {
         mCurrentState.value = currentState.value?.copy(temp = temp)
     }
 
-/*    fun setPower(power: AcPower) {
-        mCurrentState.value = currentState.value?.copy(power = power.value)
-    }*/
-
-    fun setFan(fan: AcFan) {
+/*    fun setFan(fan: AcFan) {
         mCurrentState.value = currentState.value?.copy(fan = fan.value)
-    }
+    }*/
 
     fun togglePower() {
         currentState.value?.let {
