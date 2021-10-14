@@ -9,12 +9,15 @@
 # and specify the fully qualified class name to the JavaScript interface
 # class:
 
--keep public class com.beust.klaxon.Klaxon.**
--keep public class by.pzmandroid.mac.model.** {
-public protected *;
-}
+# Klaxon
+-keep public class kotlin.reflect.jvm.internal.impl.** { public *; }
+-keep class com.beust.klaxon.** { *; }
+-keep interface com.beust.klaxon.** { *; }
+
+-keep public class by.pzmandroid.mac.model.** {*;}
 -keep public class by.pzmandroid.mac.utils.*
 
+-keep class kotlin.Metadata { *; }
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
 #-keepattributes SourceFile,LineNumberTable
