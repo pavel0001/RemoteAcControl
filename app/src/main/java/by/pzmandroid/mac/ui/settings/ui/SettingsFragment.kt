@@ -11,22 +11,28 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import by.pzmandroid.mac.MacApp
 import by.pzmandroid.mac.R
 import by.pzmandroid.mac.databinding.FragmentSettingsBinding
+import by.pzmandroid.mac.model.Credits
 import by.pzmandroid.mac.ui.settings.vm.SettingVM
 import by.pzmandroid.mac.utils.*
 import by.pzmandroid.mac.utils.extensions.safelyNavigate
 
+const val DEMO_CREDITS_DEV = 97
+const val DEMO_CREDITS_PROD = 12
 
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private val binding by viewBinding(FragmentSettingsBinding::bind)
     private val viewModel by viewModels<SettingVM>()
 
+    private val demoCredentialsProd = Credits("tcp://test.mosquitto.org:1883", "", "", "", "demo/")
+    private val demoCredentialsDev = Credits("tcp://140.238.171.78:1883", "", "", "", "esp32/myowndemo/")
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.let {
             loadSettings()
             initUI(it)
-            initVM()
+            viewModel.disconnectMqtt()
         }
     }
 
@@ -72,18 +78,21 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
     private fun loadDemoPreset() {
-        with(binding) {
-            fsServerText.setText(MQTT_SERVER_URI)
-            fsLoginText.setText(MQTT_LOGIN)
-            fsPwdText.setText(MQTT_PWD)
-            fsClientText.setText(MQTT_CLIENT_ID)
-            fsTopicText.setText(MQTT_TOPIC_ROOT)
-        }
-    }
-
-    private fun initVM() {
-        with(binding) {
-            viewModel.disconnectMqtt()
+        when (MacApp.instance.demoCredentialsType) {
+            DEMO_CREDITS_DEV -> {
+                demoCredentialsDev
+            }
+            else -> {
+                demoCredentialsProd
+            }
+        }.let {
+            with(binding) {
+                fsServerText.setText(it.server)
+                fsLoginText.setText(it.login)
+                fsPwdText.setText(it.pwd)
+                fsClientText.setText(it.clientId)
+                fsTopicText.setText(it.topic)
+            }
         }
     }
 }

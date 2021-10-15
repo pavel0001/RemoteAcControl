@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import by.pzmandroid.mac.model.Credits
+import by.pzmandroid.mac.ui.settings.ui.DEMO_CREDITS_DEV
+import by.pzmandroid.mac.ui.settings.ui.DEMO_CREDITS_PROD
 import by.pzmandroid.mac.utils.*
 import timber.log.Timber
 
@@ -22,6 +24,11 @@ class MacApp : Application() {
     var credentials: Credits? = null
         private set
 
+    private val demoCredentialsString = "demoCredentialsString"
+
+    var demoCredentialsType: Int? = null
+        private set
+
     companion object {
         lateinit var instance: MacApp
             private set
@@ -35,6 +42,8 @@ class MacApp : Application() {
             Timber.plant(Timber.DebugTree())
         }
         sharedPreferences = getSharedPreferences("MacAppPreferences", Context.MODE_PRIVATE)
+
+        loadDemoCredentialsType()
         loadCred()
         instance = this
     }
@@ -63,5 +72,23 @@ class MacApp : Application() {
 
     fun setNotConnectedRun(isItFirstConnect: Boolean) {
         firstNotConnectedRun = isItFirstConnect
+    }
+
+    fun setupDemoCredentialsDev() {
+        sharedPreferences.edit {
+            putInt(demoCredentialsString, DEMO_CREDITS_DEV)
+        }
+        loadDemoCredentialsType()
+    }
+
+    fun setupDemoCredentialsProd() {
+        sharedPreferences.edit {
+            putInt(demoCredentialsString, DEMO_CREDITS_PROD)
+        }
+        loadDemoCredentialsType()
+    }
+
+    private fun loadDemoCredentialsType() {
+        demoCredentialsType = sharedPreferences.getInt(demoCredentialsString, 0)
     }
 }

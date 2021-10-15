@@ -40,4 +40,6 @@
     <string name="not_connected_setting">К настройкам</string>
     <string name="not_connected_progress">Подключаемся…</string>
 
+    <string name="dev_fragment_dev">Dev</string>
+    <string name="dev_fragment_prod">Prod</string>
 </resources>

@@ -42,4 +42,7 @@
     <string name="not_connected_refresh">Connect</string>
     <string name="not_connected_setting">To settings</string>
     <string name="not_connected_progress">Connecting…</string>
+
+    <string name="dev_fragment_dev">Dev</string>
+    <string name="dev_fragment_prod">Prod</string>
 </resources>

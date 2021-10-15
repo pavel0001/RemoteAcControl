@@ -37,6 +37,13 @@ class NotConnectedFragment : Fragment(R.layout.fragment_not_connected) {
             fncRefresh.setOnClickListener {
                 viewModel.reconnect(activity)
             }
+            var counter = 0
+            fncDev.setOnClickListener {
+                counter++
+                if (counter >= 5) {
+                    findNavController().safelyNavigate(NotConnectedFragmentDirections.toDevFragment())
+                }
+            }
         }
     }
 

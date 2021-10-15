@@ -26,6 +26,15 @@
 
     <fragment
         android:id="@+id/notConnectedFragment"
-        android:name="by.pzmandroid.mac.ui.notconnected.ui.NotConnectedFragment"/>
+        android:name="by.pzmandroid.mac.ui.notconnected.ui.NotConnectedFragment">
+
+        <action
+            android:id="@+id/toDevFragment"
+            app:destination="@id/devFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/devFragment"
+        android:name="by.pzmandroid.mac.ui.dev.ui.DevFragment" />
 
 </navigation>
