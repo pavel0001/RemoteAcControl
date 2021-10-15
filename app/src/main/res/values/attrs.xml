@@ -11,6 +11,7 @@
     <attr name="MacColorSecondaryText" format="color" />
     <attr name="MacColorDarkIcon" format="color" />
     <attr name="MacColorSecondaryLightBg" format="color" />
+    <attr name="MacColorLightIcon" format="color" />
 
     <declare-styleable name="VerticalSlider">
         <attr name="customRowHeight" format="float" />
