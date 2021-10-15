@@ -47,7 +47,7 @@ object MqttRepository {
     fun initializeAndConnect(context: Context) {
         refreshCredits()
         mMqttProgress.value = true
-        mqttClient?.close()
+        mqttClient?.disconnect()
         MQTTClient(context, credits.server, credits.clientId).let {
             mqttClient = it
         }

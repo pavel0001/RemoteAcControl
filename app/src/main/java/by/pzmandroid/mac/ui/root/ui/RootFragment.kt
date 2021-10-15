@@ -118,8 +118,7 @@ class RootFragment : Fragment(R.layout.fragment_root) {
                     frTemperature.text =
                         getString(R.string.root_temperature, it.temperature)
                     frPressure.text = getString(R.string.root_pressure, it.getPressureMm())
-                    frTemperatureSign.isGone = false
-                    frTemperature.isGone = false
+                    frTempContainer.isGone = false
                 }
             }
 

@@ -1,6 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.MAC" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorAccent">@color/colorModeSelected</item>
         <item name="MacColorLightBg">@color/colorWhite</item>
         <item name="MacColorNeutral">@color/colorModeNormal</item>
         <item name="MacColorAccent">@color/colorModeSelected</item>
@@ -10,9 +11,10 @@
         <item name="MacColorInversedText">@color/colorWhite</item>
         <item name="MacColorSecondaryText">@color/colorRaven</item>
         <item name="MacColorDarkIcon">@color/colorRaven</item>
+        <item name="MacColorLightIcon">@color/colorLightIcon</item>
         <!-- Customize your theme here. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <item name="android:windowBackground">@drawable/bg_lines_dots</item>
+        <item name="android:windowBackground">@drawable/bg_waves</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:scaleType">centerCrop</item>
     </style>
@@ -56,6 +58,10 @@
         <item name="android:textSize">@dimen/font_size_huge</item>
     </style>
 
+    <style name="MacText.Inversed.XGiant">
+        <item name="android:textSize">@dimen/font_size_xgiant</item>
+    </style>
+
     <style name="MacText.Inversed.ExtraGiant">
         <item name="android:textSize">@dimen/font_size_extra_giant</item>
     </style>
@@ -75,7 +81,8 @@
     <style name="MacInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="errorEnabled">false</item>
         <item name="boxStrokeColor">@drawable/text_input_selector</item>
-        <item name="android:textColorHint">@drawable/text_input_selector</item>
+        <item name="hintTextColor">@drawable/text_input_selector</item>
+        <item name="startIconTint">@drawable/text_input_selector</item>
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">sans-serif</item>
     </style>
@@ -83,6 +90,13 @@
     <style name="MacTextButton" parent="MacText.Primary.Large">
         <item name="android:background">@drawable/bg_stroke_button</item>
         <item name="android:elevation">4dp</item>
+        <item name="android:textColor">?attr/MacColorInversedText</item>
         <item name="android:gravity">center</item>
+    </style>
+
+    <style name="MacCardView" parent="CardView">
+        <item name="cardCornerRadius">10dp</item>
+        <item name="cardBackgroundColor">?attr/MacColorLightBg</item>
+        <item name="elevation">10dp</item>
     </style>
 </resources>

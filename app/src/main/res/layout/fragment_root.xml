@@ -11,7 +11,7 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:foregroundGravity="center"
-        app:layout_constraintBottom_toBottomOf="@id/fr_temperature"
+        app:layout_constraintBottom_toBottomOf="@id/fr_temp_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:matProg_fillRadius="true"
@@ -29,50 +29,64 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription" />
 
-    <TextView
-        android:id="@+id/fr_temperature"
-        style="@style/MacText.Inversed.ExtraGiant"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="54dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@id/fr_right_container"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="32"
-        tools:visibility="visible" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_temp_inhouse"
-        app:layout_constraintBottom_toBottomOf="@id/fr_temperature"
-        app:layout_constraintStart_toEndOf="@id/fr_temperature"
-        app:layout_constraintTop_toBottomOf="@id/fr_temperature_sign"
-        app:tint="?attr/MacColorDarkIcon" />
-
-    <TextView
-        android:id="@+id/fr_pressure"
-        style="@style/MacText.Hint.Normal"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/fr_temp_container"
+        style="@style/MacCardView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:lines="1"
-        app:layout_constraintEnd_toEndOf="@id/fr_temperature_sign"
-        app:layout_constraintStart_toStartOf="@id/fr_temperature"
-        app:layout_constraintTop_toBottomOf="@id/fr_temperature"
-        tools:text="742 мм.рт.ст." />
-
-    <TextView
-        android:id="@+id/fr_temperature_sign"
-        style="@style/MacText.Hint.Huge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/root_temperature_celsius"
+        android:layout_marginTop="16dp"
         android:visibility="gone"
-        app:layout_constraintStart_toEndOf="@id/fr_temperature"
-        app:layout_constraintTop_toTopOf="@id/fr_temperature"
-        tools:visibility="visible" />
+        app:layout_constraintEnd_toEndOf="@id/fr_apply"
+        app:layout_constraintStart_toStartOf="@id/fr_apply"
+        app:layout_constraintTop_toBottomOf="@id/fr_disconnect"
+        tools:visibility="visible">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/fr_temperature"
+                style="@style/MacText.Primary.ExtraGiant"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="32" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_temp_inhouse"
+                app:layout_constraintBottom_toBottomOf="@id/fr_temperature"
+                app:layout_constraintStart_toEndOf="@id/fr_temperature"
+                app:layout_constraintTop_toBottomOf="@id/fr_temperature_sign"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/fr_pressure"
+                style="@style/MacText.Hint.Normal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lines="1"
+                app:layout_constraintEnd_toEndOf="@id/fr_temperature_sign"
+                app:layout_constraintStart_toStartOf="@id/fr_temperature"
+                app:layout_constraintTop_toBottomOf="@id/fr_temperature"
+                tools:text="742 мм.рт.ст." />
+
+            <TextView
+                android:id="@+id/fr_temperature_sign"
+                style="@style/MacText.Hint.Huge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/root_temperature_celsius"
+                app:layout_constraintStart_toEndOf="@id/fr_temperature"
+                app:layout_constraintTop_toTopOf="@id/fr_temperature" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
     <ImageView
         android:id="@+id/fr_ac_toggle"
@@ -82,7 +96,7 @@
         app:layout_constraintBottom_toTopOf="@id/fr_apply"
         app:layout_constraintEnd_toStartOf="@id/fr_right_container"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fr_temperature"
+        app:layout_constraintTop_toBottomOf="@id/fr_temp_container"
         tools:ignore="ContentDescription" />
 
     <ImageView
@@ -143,7 +157,6 @@
         android:layout_margin="16dp"
         android:paddingVertical="16dp"
         android:text="@string/root_apply"
-        android:textColor="?attr/MacColorInversedText"
         android:textSize="@dimen/font_size_pre_giant"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/fr_right_container"

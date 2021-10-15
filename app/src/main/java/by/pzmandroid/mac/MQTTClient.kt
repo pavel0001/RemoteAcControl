@@ -157,6 +157,7 @@ class MQTTClient(
     }
     private val defaultCbDisconnect = object : IMqttActionListener {
         override fun onSuccess(asyncActionToken: IMqttToken?) {
+            mqttClient.close()
             Timber.i("defaultCbDisconnect onSuccess")
         }
 

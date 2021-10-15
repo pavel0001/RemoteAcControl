@@ -4,8 +4,9 @@
 
     <color name="colorCharade">#213E45</color>
     <color name="colorRaven">#72757A</color>
+    <color name="colorLightIcon">#DCE0E8</color>
 
-    <color name="colorSecondaryBg">#427987</color>
+    <color name="colorSecondaryBg">#182E45</color>
     <color name="colorSecondaryLightBg">#8AB7C3</color>
     <color name="colorBgLines">#8AB7C3</color>
 

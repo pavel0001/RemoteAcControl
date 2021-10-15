@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="?attr/MacColorSecondaryText" android:state_focused="true" />
-    <item android:color="?attr/MacColorAccent"  />
+    <item android:color="?attr/MacColorAccent" android:state_focused="true" />
+    <item android:alpha="0.87" android:color="?attr/MacColorAccent" android:state_hovered="true" />
+    <item android:alpha="0.12" android:color="?attr/MacColorAccent" android:state_enabled="false" />
+    <item android:alpha="0.38" android:color="?attr/MacColorSecondaryText" />
 </selector>
