@@ -54,6 +54,10 @@
         <item name="android:textSize">@dimen/font_size_normal</item>
     </style>
 
+    <style name="MacText.Inversed.Big">
+        <item name="android:textSize">@dimen/font_size_big</item>
+    </style>
+
     <style name="MacText.Inversed.Huge">
         <item name="android:textSize">@dimen/font_size_huge</item>
     </style>

@@ -8,7 +8,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import by.pzmandroid.mac.MacApp
 import by.pzmandroid.mac.R
 import by.pzmandroid.mac.databinding.FragmentDevBinding
-import by.pzmandroid.mac.ui.settings.ui.DEMO_CREDITS_DEV
+import by.pzmandroid.mac.ui.settings.ui.CREDITS_TYPE_DEV
 
 class DevFragment : Fragment(R.layout.fragment_dev) {
 
@@ -36,7 +36,7 @@ class DevFragment : Fragment(R.layout.fragment_dev) {
         with(binding) {
             fdRadioGroup.check(
                 when (MacApp.instance.demoCredentialsType) {
-                    DEMO_CREDITS_DEV -> {
+                    CREDITS_TYPE_DEV -> {
                         R.id.fd_dev
                     }
                     else -> {

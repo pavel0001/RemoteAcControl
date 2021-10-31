@@ -89,6 +89,16 @@
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/fs_sensor_state"
+        style="@style/MacText.Inversed.Big"
+        app:switchPadding="24dp"
+        android:layout_width="wrap_content"
+        android:text="@string/setting_sensor_state"
+        app:layout_constraintStart_toStartOf="@id/fs_topic_input_layout"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/fs_topic_input_layout"/>
+
     <TextView
         android:id="@+id/fs_preset_demo"
         style="@style/MacTextButton"
@@ -100,7 +110,7 @@
         android:gravity="center"
         android:padding="16dp"
         android:text="@string/setting_demo_preset"
-        app:layout_constraintTop_toBottomOf="@id/fs_topic_input_layout" />
+        app:layout_constraintTop_toBottomOf="@id/fs_sensor_state" />
 
     <TextView
         android:id="@+id/fs_apply"
