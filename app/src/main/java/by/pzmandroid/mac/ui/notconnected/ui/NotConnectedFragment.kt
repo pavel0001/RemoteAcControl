@@ -3,6 +3,7 @@ package by.pzmandroid.mac.ui.notconnected.ui
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -44,6 +45,7 @@ class NotConnectedFragment : Fragment(R.layout.fragment_not_connected) {
                     findNavController().safelyNavigate(NotConnectedFragmentDirections.toDevFragment())
                 }
             }
+            fncActionInterceptor.setOnClickListener { }
         }
     }
 
@@ -57,6 +59,7 @@ class NotConnectedFragment : Fragment(R.layout.fragment_not_connected) {
                 }
             }
             viewModel.progress.observe(viewLifecycleOwner) {
+                fncActionInterceptor.isGone = !it
                 fncProgress.isVisible = it
                 fncProgress.spin()
                 fncRefresh.isEnabled = !it

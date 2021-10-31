@@ -73,4 +73,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fnc_refresh" />
 
+    <by.pzmandroid.mac.utils.view.ActionInterceptorView
+        android:id="@+id/fnc_action_interceptor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="240dp"
+        android:visibility="gone" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
