@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
@@ -28,7 +29,6 @@ class RootFragment : Fragment(R.layout.fragment_root) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.let {
-            viewModel.syncWithCurrent()
             initUI()
             initVM(it)
         }
@@ -83,7 +83,10 @@ class RootFragment : Fragment(R.layout.fragment_root) {
 
     private fun initVM(activity: FragmentActivity) {
         with(binding) {
-            viewModel.syncState.observe(viewLifecycleOwner) {
+            viewModel.needToSync.observe(viewLifecycleOwner) {
+                frSyncBadge.isVisible = it
+            }
+            viewModel.currentAcStateFromMobile.observe(viewLifecycleOwner) {
                 togglePowerBtn(it.power == AcPower.ON.value)
                 if (frTempSlider.getValue() != it.temp) {
                     frTempSlider.setupSlider(it.temp.toFloat())
@@ -115,7 +118,7 @@ class RootFragment : Fragment(R.layout.fragment_root) {
                 frProgress.updateProgressState(it)
             }
 
-            viewModel.receivedMessage.observe(viewLifecycleOwner) { receivedMessage ->
+            viewModel.receivedSensorState.observe(viewLifecycleOwner) { receivedMessage ->
                 receivedMessage?.let {
                     if (MacApp.instance.sensorState) {
                         frTempProgress.stopSpinning()

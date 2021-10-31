@@ -1,13 +1,22 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="38dp"
+    android:width="33.763935dp"
     android:height="38dp"
-    android:tint="?attr/MacColorInversedText"
-    android:viewportWidth="24"
-    android:viewportHeight="24">
+    android:viewportWidth="271"
+    android:viewportHeight="305">
     <path
-        android:fillColor="@android:color/white"
-        android:pathData="M22,8l-4,-4v3H3v2h15v3L22,8z" />
+        android:pathData="M5,152a131,130.5 0,1 0,262 0a131,130.5 0,1 0,-262 0z"
+        android:strokeWidth="6"
+        android:strokeColor="?attr/MacColorLightBg" />
     <path
-        android:fillColor="@android:color/white"
-        android:pathData="M2,16l4,4v-3h15v-2H6v-3L2,16z" />
+        android:pathData="m209.306,134.704c-0.691,-29.567 -24.521,-53.319 -53.824,-53.334c-19.59,0.015 -36.699,10.637 -46.101,26.501c-4.418,-2.463 -9.505,-3.902 -14.926,-3.902c-16.924,0.015 -30.692,13.612 -31.308,30.63c-17.77,5.921 -30.632,22.788 -30.647,42.833c0,24.95 19.954,45.199 44.556,45.199l0,-0.015l117.888,0c24.595,0 44.556,-20.249 44.556,-45.199c-0.03,-19.872 -12.669,-36.664 -30.194,-42.713zM194.929,207.564l-117.88,0c-16.404,-0.045 -29.682,-13.507 -29.711,-30.132c-0.015,-14.938 10.768,-27.262 24.877,-29.628c1.968,-0.324 3.728,-1.431 4.879,-3.119c1.151,-1.672 1.574,-3.744 1.21,-5.74c-0.208,-1.122 -0.334,-2.17 -0.334,-3.194c0.03,-9.228 7.389,-16.701 16.486,-16.716c4.805,0 9.037,2.094 12.127,5.507c1.73,1.936 4.359,2.825 6.884,2.335c2.54,-0.497 4.649,-2.32 5.555,-4.753c5.562,-15.006 19.768,-25.703 36.469,-25.688c21.521,0.03 38.942,17.71 38.994,39.549c0,1.205 -0.067,2.448 -0.193,3.736c-0.371,3.902 2.265,7.413 6.045,8.128c13.805,2.599 24.305,14.81 24.29,29.552c-0.037,16.656 -13.293,30.117 -29.697,30.163z"
+        android:strokeWidth="6"
+        android:strokeColor="?attr/MacColorLightBg" />
+    <path
+        android:fillColor="?attr/MacColorLightBg"
+        android:pathData="m122.5,33.546l12.598,-12.725l-12.598,-12.725l7.2,-7.272l19.8,19.997l-19.8,20.003"
+        android:strokeWidth="0" />
+    <path
+        android:fillColor="?attr/MacColorLightBg"
+        android:pathData="m149.066,269.658l-12.164,13.14l13.018,12.295l-6.952,7.509l-20.459,-19.322l19.118,-20.656"
+        android:strokeWidth="0" />
 </vector>

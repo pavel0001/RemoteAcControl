@@ -183,6 +183,18 @@
         tools:ignore="ContentDescription" />
 
     <ImageView
+        android:id="@+id/fr_sync_badge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="20sp"
+        android:src="@drawable/ic_notify"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/fr_sync"
+        app:layout_constraintEnd_toEndOf="@id/fr_sync"
+        app:layout_constraintStart_toEndOf="@id/fr_sync"
+        app:layout_constraintTop_toTopOf="@id/fr_sync" />
+
+    <ImageView
         android:id="@+id/fr_turbo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
