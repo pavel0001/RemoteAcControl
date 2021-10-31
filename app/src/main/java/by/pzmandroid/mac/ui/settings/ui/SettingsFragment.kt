@@ -24,8 +24,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private val binding by viewBinding(FragmentSettingsBinding::bind)
     private val viewModel by viewModels<SettingVM>()
 
-    private val demoCredentialsProd = Credits("tcp://test.mosquitto.org:1883", "", "", "", "demo/")
-    private val demoCredentialsDev = Credits("tcp://140.238.171.78:1883", "", "", "", "esp32/myowndemo/")
+    private val demoCredentialsProd = Credits("tcp://test.mosquitto.org:1883", "", "", "", "prod/")
+    private val demoCredentialsDev = Credits("tcp://test.mosquitto.org:1883", "", "", "", "demo/")
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
