@@ -5,8 +5,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import by.pzmandroid.mac.model.Credits
-import by.pzmandroid.mac.ui.settings.ui.DEMO_CREDITS_DEV
-import by.pzmandroid.mac.ui.settings.ui.DEMO_CREDITS_PROD
+import by.pzmandroid.mac.ui.settings.ui.CREDITS_TYPE_DEV
+import by.pzmandroid.mac.ui.settings.ui.CREDITS_TYPE_PROD
 import by.pzmandroid.mac.utils.*
 import timber.log.Timber
 
@@ -18,10 +18,15 @@ class MacApp : Application() {
     private val credClientId = "credClientId"
     private val credTopic = "credTopic"
 
+    private val sensorStateKey = "sensorState"
+
     var firstNotConnectedRun = true
         private set
 
     var credentials: Credits? = null
+        private set
+
+    var sensorState: Boolean = false
         private set
 
     private val demoCredentialsString = "demoCredentialsString"
@@ -45,6 +50,7 @@ class MacApp : Application() {
 
         loadDemoCredentialsType()
         loadCred()
+        loadSensorState()
         instance = this
     }
 
@@ -58,6 +64,17 @@ class MacApp : Application() {
             putString(credTopic, topic)
         }
         loadCred()
+    }
+
+    fun saveSensorState(state: Boolean) {
+        sharedPreferences.edit {
+            putBoolean(sensorStateKey, state)
+        }
+        loadSensorState()
+    }
+
+    private fun loadSensorState() {
+        sensorState = sharedPreferences.getBoolean(sensorStateKey, false)
     }
 
     private fun loadCred() {
@@ -76,14 +93,14 @@ class MacApp : Application() {
 
     fun setupDemoCredentialsDev() {
         sharedPreferences.edit {
-            putInt(demoCredentialsString, DEMO_CREDITS_DEV)
+            putInt(demoCredentialsString, CREDITS_TYPE_DEV)
         }
         loadDemoCredentialsType()
     }
 
     fun setupDemoCredentialsProd() {
         sharedPreferences.edit {
-            putInt(demoCredentialsString, DEMO_CREDITS_PROD)
+            putInt(demoCredentialsString, CREDITS_TYPE_PROD)
         }
         loadDemoCredentialsType()
     }

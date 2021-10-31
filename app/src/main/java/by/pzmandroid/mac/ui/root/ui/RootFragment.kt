@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
+import by.pzmandroid.mac.MacApp
 import by.pzmandroid.mac.R
 import by.pzmandroid.mac.databinding.FragmentRootBinding
 import by.pzmandroid.mac.model.AcMode
@@ -40,7 +41,9 @@ class RootFragment : Fragment(R.layout.fragment_root) {
                     viewModel.disconnect()
                 }
             })
-            frTempProgress.spin()
+            if (MacApp.instance.sensorState) {
+                frTempProgress.spin()
+            }
             frApply.setOnClickListener {
                 viewModel.sendCmd()
             }
@@ -114,11 +117,13 @@ class RootFragment : Fragment(R.layout.fragment_root) {
 
             viewModel.receivedMessage.observe(viewLifecycleOwner) { receivedMessage ->
                 receivedMessage?.let {
-                    frTempProgress.stopSpinning()
-                    frTemperature.text =
-                        getString(R.string.root_temperature, it.temperature)
-                    frPressure.text = getString(R.string.root_pressure, it.getPressureMm())
-                    frTempContainer.isGone = false
+                    if (MacApp.instance.sensorState) {
+                        frTempProgress.stopSpinning()
+                        frTemperature.text =
+                            getString(R.string.root_temperature, it.temperature)
+                        frPressure.text = getString(R.string.root_pressure, it.getPressureMm())
+                        frTempContainer.isGone = false
+                    }
                 }
             }
 

@@ -35,6 +35,7 @@
     <string name="setting_test_connection">Test connection</string>
     <string name="setting_apply">Apply</string>
     <string name="setting_demo_preset">Test preset</string>
+    <string name="setting_sensor_state">Temperature sensor</string>
 
     <string name="progress_setting">Settings</string>
 

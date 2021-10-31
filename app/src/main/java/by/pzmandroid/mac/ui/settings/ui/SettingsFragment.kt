@@ -16,8 +16,8 @@ import by.pzmandroid.mac.ui.settings.vm.SettingVM
 import by.pzmandroid.mac.utils.*
 import by.pzmandroid.mac.utils.extensions.safelyNavigate
 
-const val DEMO_CREDITS_DEV = 97
-const val DEMO_CREDITS_PROD = 12
+const val CREDITS_TYPE_DEV = 97
+const val CREDITS_TYPE_PROD = 12
 
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
@@ -50,6 +50,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 MacApp.instance.setNotConnectedRun(true)
                 findNavController().safelyNavigate(SettingsFragmentDirections.toNotConnected())
             }
+            fsSensorState.isChecked = MacApp.instance.sensorState
+            fsSensorState.setOnCheckedChangeListener { _, isChecked ->
+                MacApp.instance.saveSensorState(isChecked)
+            }
         }
     }
 
@@ -79,7 +83,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private fun loadDemoPreset() {
         when (MacApp.instance.demoCredentialsType) {
-            DEMO_CREDITS_DEV -> {
+            CREDITS_TYPE_DEV -> {
                 demoCredentialsDev
             }
             else -> {

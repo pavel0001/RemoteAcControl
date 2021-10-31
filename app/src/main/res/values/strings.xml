@@ -32,6 +32,7 @@
     <string name="setting_test_connection">Тест соединения</string>
     <string name="setting_apply">Применить</string>
     <string name="setting_demo_preset">Тестовые настройки</string>
+    <string name="setting_sensor_state">Датчик температуры</string>
 
     <string name="progress_setting">К настройкам</string>
 
