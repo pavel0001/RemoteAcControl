@@ -36,8 +36,8 @@ object MqttRepository {
     private val mConnectResult = MutableLiveData<Event<RequestResult>>()
     val connectResult: LiveData<Event<RequestResult>> = mConnectResult
 
-    private val mReceivedMessage = MutableLiveData<SensorResponse>()
-    val receivedMessage: LiveData<SensorResponse> = mReceivedMessage
+    private val mReceivedSensorState = MutableLiveData<SensorResponse>()
+    val receivedSensorState: LiveData<SensorResponse> = mReceivedSensorState
 
     private val mCurrentAcState = MutableLiveData<Event<AcState>>()
     val currentAcState: LiveData<Event<AcState>> = mCurrentAcState
@@ -144,7 +144,7 @@ object MqttRepository {
                 credits.MQTT_TOPIC_SENSOR -> {
                     Timber.d("Message is arrive $topic $message")
                     Klaxon().parse<SensorResponse>(message.toString())?.let { data ->
-                        mReceivedMessage.value = data
+                        mReceivedSensorState.value = data
                     }
                 }
                 credits.MQTT_TOPIC_CALLBACK -> {

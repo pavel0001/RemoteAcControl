@@ -1,29 +1,42 @@
 package by.pzmandroid.mac.ui.root.vm
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import by.pzmandroid.mac.model.AcMode
+import by.pzmandroid.mac.model.AcState
 import by.pzmandroid.mac.model.AcTurbo
 import by.pzmandroid.mac.repository.CmdRepository
 import by.pzmandroid.mac.repository.MqttRepository
 import by.pzmandroid.mac.utils.Event
-import by.pzmandroid.mac.utils.SYNC_TIMEOUT
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class RootVM : ViewModel() {
 
     val mqttProgress = MqttRepository.mqttProgress
-    val receivedMessage = MqttRepository.receivedMessage
+    val receivedSensorState = MqttRepository.receivedSensorState
     val publishResult = MqttRepository.publishResult
 
     val connectResult = MqttRepository.connectionState
 
     private val currentAcStateFromEsp = MqttRepository.currentAcState
 
-    val syncState = CmdRepository.currentState
+    val currentAcStateFromMobile = CmdRepository.currentState
+
+    val needToSync = MediatorLiveData<Boolean>().apply {
+        addSource(currentAcStateFromEsp) {
+            value = mergeNeedToShowSyncBadge(
+                stateFromMobile = currentAcStateFromMobile.value,
+                stateFromEsp = it.peek()
+            )
+        }
+        addSource(currentAcStateFromMobile) {
+            value = mergeNeedToShowSyncBadge(
+                stateFromMobile = it,
+                stateFromEsp = currentAcStateFromEsp.value?.peek()
+            )
+        }
+    }
+
+    private fun mergeNeedToShowSyncBadge(stateFromMobile: AcState?, stateFromEsp: AcState?) = stateFromEsp != stateFromMobile && stateFromEsp != null
 
     private val mSyncProgress = MutableLiveData(false)
     val syncProgress: LiveData<Boolean> = mSyncProgress
@@ -60,21 +73,10 @@ class RootVM : ViewModel() {
     }
 
     fun syncWithCurrent() {
-        viewModelScope.launch {
+        needToSync.value?.let {
             mSyncProgress.value = true
-            var counter = 0
-            loop@ while (true) {
-                val currentState = currentAcStateFromEsp.value?.getIfPending()
-                if (currentState != null) {
-                    CmdRepository.syncWithEsp(currentState)
-                    break@loop
-                }
-                if (counter >= SYNC_TIMEOUT) {
-                    mSyncError.value = Event(MqttRepository.RequestResult.FAIL)
-                    break@loop
-                }
-                counter++
-                delay(1000)
+            currentAcStateFromEsp.value?.peek()?.let { stateFromEsp ->
+                CmdRepository.syncWithEsp(stateFromEsp)
             }
             mSyncProgress.value = false
         }
