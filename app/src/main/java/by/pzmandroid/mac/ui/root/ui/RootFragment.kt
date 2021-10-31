@@ -94,14 +94,6 @@ class RootFragment : Fragment(R.layout.fragment_root) {
                 calculateEnabledMode(activity, it.mode)
             }
 
-            viewModel.syncError.observe(viewLifecycleOwner) { syncError ->
-                syncError.getIfPending()?.let {
-                    if (it == MqttRepository.RequestResult.FAIL) {
-                        Toast.makeText(activity, getString(R.string.root_sync_error), Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-
             viewModel.connectResult.observe(viewLifecycleOwner) { connectResult ->
                 connectResult.getIfPending()?.let {
                     if (it != MqttRepository.ConnectionState.CONNECTED) {
@@ -110,11 +102,7 @@ class RootFragment : Fragment(R.layout.fragment_root) {
                 }
             }
 
-            viewModel.mqttProgress.observe(viewLifecycleOwner) {
-                frProgress.updateProgressState(it)
-            }
-
-            viewModel.syncProgress.observe(viewLifecycleOwner) {
+            viewModel.progressState.observe(viewLifecycleOwner) {
                 frProgress.updateProgressState(it)
             }
 

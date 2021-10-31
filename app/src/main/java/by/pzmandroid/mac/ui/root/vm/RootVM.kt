@@ -1,17 +1,19 @@
 package by.pzmandroid.mac.ui.root.vm
 
-import androidx.lifecycle.*
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import by.pzmandroid.mac.model.AcMode
 import by.pzmandroid.mac.model.AcState
 import by.pzmandroid.mac.model.AcTurbo
 import by.pzmandroid.mac.repository.CmdRepository
 import by.pzmandroid.mac.repository.MqttRepository
-import by.pzmandroid.mac.utils.Event
 import kotlinx.coroutines.launch
 
 class RootVM : ViewModel() {
 
-    val mqttProgress = MqttRepository.mqttProgress
+    private val mqttProgress = MqttRepository.mqttProgress
     val receivedSensorState = MqttRepository.receivedSensorState
     val publishResult = MqttRepository.publishResult
 
@@ -39,10 +41,25 @@ class RootVM : ViewModel() {
     private fun mergeNeedToShowSyncBadge(stateFromMobile: AcState?, stateFromEsp: AcState?) = stateFromEsp != stateFromMobile && stateFromEsp != null
 
     private val mSyncProgress = MutableLiveData(false)
-    val syncProgress: LiveData<Boolean> = mSyncProgress
 
-    private val mSyncError = MutableLiveData<Event<MqttRepository.RequestResult>>()
-    val syncError: LiveData<Event<MqttRepository.RequestResult>> = mSyncError
+    val progressState = MediatorLiveData<Boolean>().apply {
+        addSource(mSyncProgress) {
+            value = mergeProgressState(
+                syncProgress = it,
+                mqttProgress = mqttProgress.value
+            )
+        }
+        addSource(mqttProgress) {
+            value = mergeProgressState(
+                syncProgress = mSyncProgress.value,
+                mqttProgress = it
+            )
+        }
+    }
+
+    private fun mergeProgressState(syncProgress: Boolean?, mqttProgress: Boolean?): Boolean {
+        return (syncProgress != null && mqttProgress != null) && syncProgress || mqttProgress == true
+    }
 
     fun acTogglePower() {
         CmdRepository.togglePower()

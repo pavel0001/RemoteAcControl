@@ -80,6 +80,7 @@ object MqttRepository {
 
     fun disconnect() {
         mqttClient?.let { mqtt ->
+            mMqttProgress.value = true
             if (mqtt.isConnected()) {
                 if (mqtt.isSubscribe) {
                     mqtt.setSubscribeStateChangeListener {
@@ -94,6 +95,7 @@ object MqttRepository {
                     mqtt.disconnect()
                 }
             }
+            mMqttProgress.value = false
         }
     }
 
